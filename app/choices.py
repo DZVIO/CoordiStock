@@ -245,3 +245,30 @@ codigos_telefonicos_paises = [
     "Zambia (+260)",
     "Zimbabue (+263)"
 ]
+ciudades_colombia = [
+    "Bogotá (BOG)",
+    "Medellín (MDE)",
+    "Cali (CLO)",
+    "Barranquilla (BAQ)",
+    "Cartagena (CTG)",
+    "Bucaramanga (BGA)",
+    "Cúcuta (CUC)",
+    "Pereira (PEI)",
+    "Santa Marta (SMR)",
+    "Manizales (MZL)",
+    "Ibagué (IBE)",
+    "Pasto (PSO)",
+    "Neiva (NVA)",
+    "Villavicencio (VVC)",
+    "Armenia (AXM)",
+    "Montería (MTR)",
+    "Valledupar (VUP)",
+    "Popayán (PPN)",
+    "Sincelejo (SIN)",
+    "Riohacha (RCH)",
+    "Tunja (TUN)",
+    "Florencia (FLA)",
+    "Quibdó (UIB)",
+    "Leticia (LET)",
+    "San Andrés (ADZ)"
+]
