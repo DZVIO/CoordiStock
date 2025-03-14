@@ -112,7 +112,7 @@ class Factura(models.Model):
     id_proveedor = models.ForeignKey(Proveedor, on_delete=models.PROTECT, verbose_name="Proveedor")
 
     def __str__(self):
-        return f"{self.factura}"
+        return f"{self.o_compra}: {self.n_factura}"
 
     class Meta:
         verbose_name= "factura"
@@ -132,7 +132,7 @@ class Activo(models.Model):
     activo = models.PositiveIntegerField(verbose_name="Activo", unique=True)
     categoria = models.CharField(max_length=50, choices=categorias.choices, default=categorias.PC, verbose_name="Categoría")
     modelo = models.CharField(max_length=50, verbose_name="Modelo")
-    n_serie = models.PositiveIntegerField(verbose_name="N. de serie", unique=True)
+    n_serie = models.CharField(max_length=50, verbose_name="N. de serie", unique=True)
     observaciones = models.CharField(max_length=300, verbose_name="Observaciones")
     garantia = models.BooleanField(default=True, verbose_name="Garantía")
     estado = models.BooleanField(default=True, verbose_name="Estado")
