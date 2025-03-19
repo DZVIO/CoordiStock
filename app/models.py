@@ -15,7 +15,7 @@ class Terminal(models.Model):
     direccion = models.CharField(max_length=50, verbose_name="Dirección")
     estado = models.BooleanField(default=True, verbose_name="Estado")
     def __str__(self):
-        return f"{self.terminal}"
+        return f"{self.terminal} - {self.ciudad}: {self.direccion}"
 
     class Meta:
         verbose_name= "terminal"
@@ -38,21 +38,6 @@ class Marca(models.Model):
 
 ####################################################################################################
 
-class Proveedor(models.Model):
-    proveedor = models.CharField(max_length=50, verbose_name="Proveedor", unique=True)
-    nit = models.PositiveIntegerField(verbose_name="NIT", unique=True)
-    estado = models.BooleanField(default=True, verbose_name="Estado")
-
-    def __str__(self):
-        return f"{self.proveedor}: {self.nit}"
-
-    class Meta:
-        verbose_name= "proveedor"
-        verbose_name_plural ='proveedores'
-        db_table ='Proveedor'
-
-####################################################################################################
-
 class Area(models.Model):
     area = models.CharField(max_length=50, verbose_name="Area", unique=True)    
     estado = models.BooleanField(default=True, verbose_name="Estado")
@@ -68,6 +53,11 @@ class Area(models.Model):
 ####################################################################################################
 
 class Agente(models.Model):
+    class Modalidad(models.TextChoices):
+        PR = 'PR', 'Presencial'
+        RM = 'RM', 'Remoto'
+        ES = 'ES', 'En sitio'
+
     class TipoDocumento(models.TextChoices):
         CC = 'CC', 'Cédula de Ciudadanía'
         TI = 'TI', 'Tarjeta de Identidad'
@@ -89,6 +79,8 @@ class Agente(models.Model):
     email = models.EmailField(max_length=50, verbose_name="Email", validators=[validate_email])
     pais_telefono = models.CharField(max_length=50, choices=[(pais, pais) for pais in codigos_telefonicos_paises], default='Colombia (+57)', verbose_name="Prefijo telefónico")
     telefono = models.PositiveIntegerField(verbose_name="Teléfono")
+    modalidad = models.CharField(max_length=2, choices=Modalidad.choices, default=Modalidad.PR, verbose_name="Modalidad")
+    ubicacion = models.CharField(max_length=50, verbose_name="Dirección")
     estado = models.BooleanField(default=True, verbose_name="Estado")
     id_area = models.ForeignKey(Area, on_delete=models.PROTECT, verbose_name="Area")
 
@@ -99,25 +91,6 @@ class Agente(models.Model):
         verbose_name= "agente"
         verbose_name_plural ='agentes'
         db_table ='Agente'
-
-####################################################################################################
-
-class Factura(models.Model):
-    o_compra = models.PositiveIntegerField(verbose_name="Orden de compra", unique=True)
-    n_factura = models.CharField(max_length=50, verbose_name="N. de factura", unique=True)
-    pdf_factura = models.FileField(upload_to='facturas_pdfs/', verbose_name="PDF de la factura", null=True, blank=True)
-    in_garantia = models.DateTimeField(verbose_name="Fecha de inicio de garantía")
-    fin_garantia = models.DateTimeField(verbose_name="Fecha de fin de garantía")
-    estado = models.BooleanField(default=True, verbose_name="Estado")
-    id_proveedor = models.ForeignKey(Proveedor, on_delete=models.PROTECT, verbose_name="Proveedor")
-
-    def __str__(self):
-        return f"{self.o_compra}: {self.n_factura}"
-
-    class Meta:
-        verbose_name= "factura"
-        verbose_name_plural ='facturas'
-        db_table ='Factura'
 
 ####################################################################################################
 
@@ -140,7 +113,6 @@ class Activo(models.Model):
     id_marca = models.ForeignKey(Marca, on_delete=models.PROTECT, verbose_name="Marca")
     id_agente = models.ForeignKey(Agente, on_delete=models.PROTECT, verbose_name="Agente")
     id_area = models.ForeignKey(Area, on_delete=models.PROTECT, verbose_name="Area")
-    id_factura = models.ForeignKey(Factura, on_delete=models.PROTECT, verbose_name="Factura")
 
     def __str__(self):
         return f"{self.activo}"

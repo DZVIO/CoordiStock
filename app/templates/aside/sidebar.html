@@ -12,7 +12,7 @@
                         data-toggle="collapse" aria-expanded="false" style="color: white; font-size: 13px;">
                         <div class="d-flex align-items-center">
                             <i class="nav-icon fas fa-shopping-cart" style="font-size: 25px; margin-right: 10px;"></i>
-                            <p class="mb-0" style="font-size: 19px;">Gestión de ventas</p>
+                            <p class="mb-0" style="font-size: 19px;">Movimientos</p>
                         </div>
                     </a>
                     <ul class="collapse list-unstyled pl-4" id="submenu1">
@@ -44,7 +44,7 @@
                         data-toggle="collapse" aria-expanded="false" style="color: white; font-size: 13px;">
                         <div class="d-flex align-items-center">
                             <i class="nav-icon fas fa-dolly" style="font-size: 25px; margin-right: 10px;"></i>
-                            <p class="mb-0" style="font-size: 19px;">Gestión de productos</p>
+                            <p class="mb-0" style="font-size: 19px;">Activos</p>
                         </div>
                     </a>
                     <ul class="collapse list-unstyled pl-4" id="submenu2">
@@ -73,7 +73,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center" href=""
+                            <a class="nav-link d-flex align-items-center" href="{% url 'app:marca_lista' %}"
                                 style="font-size: 19px; color: white;">
                                 <i class="nav-icon fas fa-project-diagram"
                                     style="font-size: 20px; margin-right: 10px; color: white;"></i>
@@ -86,6 +86,33 @@
                                 <i class="nav-icon fas fa-shapes"
                                     style="font-size: 20px; margin-right: 10px; color: white;"></i>
                                 <span>Presentaciones</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-itemm">
+                    <a href="#submenu4" class="nav-link d-flex justify-content-between align-items-center"
+                        data-toggle="collapse" aria-expanded="false" style="color: white; font-size: 13px;">
+                        <div class="d-flex align-items-center">
+                            <i class="nav-icon fas fa-building" style="font-size: 25px; margin-right: 10px;"></i>
+                            <p class="mb-0" style="font-size: 19px;">Distribución</p>
+                        </div>
+                    </a>
+                    <ul class="collapse list-unstyled pl-4" id="submenu4">
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center" href="{% url 'app:terminal_lista' %}"
+                                style="font-size: 19px; color: white;">
+                                <i class="nav-icon far fa-building"
+                                    style="font-size: 20px; margin-right: 10px; color: white;"></i>
+                                <span>Listado de terminales</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center" href="{% url 'app:area_lista' %}"
+                                style="font-size: 19px; color: white;">
+                                <i class="nav-icon fas fa-list"
+                                    style="font-size: 20px; margin-right: 10px; color: white;"></i>
+                                <span>Listado de areas</span>
                             </a>
                         </li>
                     </ul>
@@ -122,16 +149,16 @@
                         data-toggle="collapse" aria-expanded="false" style="color: white; font-size: 13px;">
                         <div class="d-flex align-items-center">
                             <i class="nav-icon fas fa-user-friends" style="font-size: 25px; margin-right: 10px;"></i>
-                            <p class="mb-0" style="font-size: 19px;">Gestión de meseros</p>
+                            <p class="mb-0" style="font-size: 19px;">Gestión de agentes</p>
                         </div>
                     </a>
                     <ul class="collapse list-unstyled pl-4" id="submenu4">
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center" href=""
+                            <a class="nav-link d-flex align-items-center" href="{% url 'app:agente_lista' %}"
                                 style="font-size: 19px; color: white;">
                                 <i class="nav-icon fas fa-list"
                                     style="font-size: 20px; margin-right: 10px; color: white;"></i>
-                                <span>Lista de meseros</span>
+                                <span>Lista de agentes</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -182,7 +209,7 @@
                     </a>
                     <ul class="collapse list-unstyled pl-4" id="submenu7">
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center" href=""
+                            <a class="nav-link d-flex align-items-center" href="{% url 'app:administrador_lista' %}"
                                 style="font-size: 19px; color: white;">
                                 <i class="nav-icon fas fa-user-shield"
                                     style="font-size: 20px; margin-right: 10px; color: white;"></i>

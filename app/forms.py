@@ -39,7 +39,7 @@ class TerminalForm(ModelForm):
             "estado": Select(
                 choices=[(True, "Activo"), (False, "Inactivo")],
                 attrs={
-                    "placeholder": "Estado de la categoría",
+                    "placeholder": "Estado de la terminal",
                 }
             )
         }
@@ -58,36 +58,6 @@ class MarcaForm(ModelForm):
             "marca": TextInput(
                 attrs={
                     "placeholder": "Marca",
-                }
-            ),
-            "estado": Select(
-                choices=[(True, "Activo"), (False, "Inactivo")],
-                attrs={
-                    "placeholder": "Estado de la marca",
-                }
-            )
-        }
-
-#############################################################################
-
-class ProveedorForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        
-        super().__init__(*args, **kwargs)
-        self.fields["proveedor"].widget.attrs["autofocus"] = True
-
-    class Meta:
-        model = Proveedor
-        fields = "__all__"
-        widgets = {
-            "proveedor": TextInput(
-                attrs={
-                    "placeholder": "Proveedor",
-                }
-            ),
-            "nit": NumberInput(
-                attrs={
-                    "placeholder": "NIT",
                 }
             ),
             "estado": Select(
@@ -209,68 +179,6 @@ class AgenteForm(ModelForm):
                     'class': 'form-control',
                     'name': "estado",
                 },
-            )
-        }
-
-#############################################################################
-
-class facturaForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["o_compra"].widget.attrs["autofocus"] = True
-
-    class Meta:
-        model = Factura
-        fields = "__all__"
-        widgets = {
-            'o_compra': NumberInput(
-                attrs={
-                    'id': 'o_compra',
-                    "placeholder": "Orden de compra",
-                    'class': 'form-control',
-                    'name': "o_compra",
-                }
-            ),
-            'n_factura': TextInput(
-                attrs={
-                    'id': 'n_factura',
-                    "placeholder": "N° de factura",
-                    'class': 'form-control',
-                    'name': "n_factura",
-                }
-            ),
-            'pdf_factura': ClearableFileInput(
-                attrs={
-                    'id': 'pdf_factura',
-                    "placeholder": "Factura .pdf",
-                    'class': 'form-control',
-                    'name': "pdf_factura",
-                }
-            ),
-            'in_garantia': DateTimeInput(
-                attrs={
-                    'id': 'in_garantia',
-                    "placeholder": "Fecha de inicio de garantía",
-                    'class': 'form-control',
-                    'name': "in_garantia",
-                }
-            ),
-            'fin_garantia': DateTimeInput(
-                attrs={
-                    'id': 'fin_garantia',
-                    "placeholder": "Fecha de fin de garantía",
-                    'class': 'form-control',
-                    'name': "fin_garantia",
-                }
-            ),
-            'estado': Select(
-                choices=[(True, "Activo"), (False, "Inactivo")],
-                attrs={
-                    'id': 'estado',
-                    "placeholder": "Estado de la factura",
-                    'class': 'form-control',
-                    'name': "estado",
-                }
             )
         }
 
