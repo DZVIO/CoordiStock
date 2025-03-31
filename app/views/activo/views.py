@@ -10,23 +10,23 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.utils.decorators import method_decorator
 from django.shortcuts import render, redirect
 from django.db.models import ProtectedError
-from app.models import Terminal
-from app.forms import TerminalForm
+from app.models import Activo
+from app.forms import ActivoForm
 
 @method_decorator(never_cache, name='dispatch')
-def lista_terminal(request):
+def lista_activo(request):
     nombre = {
-        'titulo': 'Listado de terminales',
-        'terminales': Terminal.objects.all()
+        'titulo': 'Listado de activos',
+        'activos': Activo.objects.all()
     }
-    return render(request, 'terminal/listar.html',nombre)
+    return render(request, 'activo/listar.html', nombre)
 
 ###### LISTAR ######
 
 @method_decorator(never_cache, name='dispatch')
-class TerminalListView(ListView):
-    model = Terminal
-    template_name = 'terminal/listar.html'
+class ActivoListView(ListView):
+    model = Activo
+    template_name = 'activo/listar.html'
     
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -38,19 +38,19 @@ class TerminalListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['titulo'] = 'Listado de terminales'
-        context['entidad'] = 'Listado de terminales'
-        context['listar_url'] = reverse_lazy('app:terminal_lista')
-        context['crear_url'] = reverse_lazy('app:terminal_crear')
+        context['titulo'] = 'Listado de activos'
+        context['entidad'] = 'Listado de activos'
+        context['listar_url'] = reverse_lazy('app:activo_lista')
+        context['crear_url'] = reverse_lazy('app:activo_crear')
         return context
 
 ###### CREAR ######
 @method_decorator(never_cache, name='dispatch')
-class TerminalCreateView(CreateView):
-    model = Terminal
-    form_class = TerminalForm
-    template_name = 'terminal/crear.html'
-    success_url = reverse_lazy('app:terminal_lista')
+class ActivoCreateView(CreateView):
+    model = Activo
+    form_class = ActivoForm
+    template_name = 'activo/crear.html'
+    success_url = reverse_lazy('app:activo_lista')
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -58,30 +58,28 @@ class TerminalCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['titulo'] = 'Registrar terminal'
-        context['entidad'] = 'Registrar terminal'
-        context['listar_url'] = reverse_lazy('app:terminal_lista')
+        context['titulo'] = 'Registrar activo'
+        context['entidad'] = 'Registrar activo'
+        context['listar_url'] = reverse_lazy('app:activo_lista')
         return context
     
     def form_valid(self, form):
-        nombre = form.cleaned_data.get('nombre').lower()
-        
-        if Terminal.objects.filter(nombre__iexact=nombre).exists():
-            form.add_error('nombre', 'Ya existe una terminal registrada con ese nombre.')
+        activo = form.cleaned_data.get('activo')
+
+        if Activo.objects.filter(activo=activo).exists():
+            form.add_error('Ya existe un equipo registrado con ese activo fijo.')
             return self.form_invalid(form)
-        
-        response = super().form_valid(form)
-        success_url = reverse('app:terminal_crear') + '?created=True'
-        return redirect(success_url)
+
+        return super().form_valid(form)
 
 ###### EDITAR ######
 
 @method_decorator(never_cache, name='dispatch')
-class TerminalUpdateView(UpdateView):
-    model = Terminal
-    form_class = TerminalForm
-    template_name = 'terminal/crear.html'
-    success_url = reverse_lazy('app:terminal_lista')
+class ActivoUpdateView(UpdateView):
+    model = Activo
+    form_class = ActivoForm
+    template_name = 'activo/crear.html'
+    success_url = reverse_lazy('app:activo_lista')
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -89,25 +87,26 @@ class TerminalUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['titulo'] = 'Editar terminal'
-        context['entidad'] = 'Editar terminal'
-        context['error'] = 'Esta terminal ya existe'
-        context['listar_url'] = reverse_lazy('app:terminal_lista')
+        context['titulo'] = 'Editar activo'
+        context['entidad'] = 'Editar activo'
+        context['error'] = 'Este activo ya existe'
+        context['listar_url'] = reverse_lazy('app:activo_lista')
         return context
 
     def form_valid(self, form):
-        terminal = form.cleaned_data.get('terminal').lower()
+        
+        activo = form.cleaned_data.get('activo')
         response = super().form_valid(form)
-        success_url = reverse('app:terminal_crear') + '?updated=True'
+        success_url = reverse('app:activo_crear') + '?updated=True'
         return redirect(success_url)
 
 ###### ELIMINAR ######
 
 @method_decorator(never_cache, name='dispatch')
-class TerminalDeleteView(DeleteView):
-    model = Terminal
-    template_name = 'terminal/eliminar.html'
-    success_url = reverse_lazy('app:terminal_lista')
+class ActivoDeleteView(DeleteView):
+    model = Activo
+    template_name = 'activo/eliminar.html'
+    success_url = reverse_lazy('app:activo_lista')
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -115,15 +114,15 @@ class TerminalDeleteView(DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['titulo'] = 'Eliminar terminal'
-        context['entidad'] = 'Eliminar terminal'
-        context['listar_url'] = reverse_lazy('app:terminal_lista')
+        context['titulo'] = 'Eliminar activo'
+        context['entidad'] = 'Eliminar activo'
+        context['listar_url'] = reverse_lazy('app:activo_lista')
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         try:
             self.object.delete()
-            return JsonResponse({'success': True, 'message': 'Terminal eliminada con éxito.'})
+            return JsonResponse({'success': True, 'message': 'Activo eliminado con éxito.'})
         except ProtectedError:
-            return JsonResponse({'success': False, 'message': 'No se puede eliminar la terminal.'})
+            return JsonResponse({'success': False, 'message': 'No se puede eliminar el activo.'})

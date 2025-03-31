@@ -6,6 +6,7 @@ from app.views.terminal.views import *
 from app.views.area.views import *
 from app.views.marca.views import *
 from app.views.agente.views import *
+from app.views.activo.views import *
 from backups.views import BackupDatabaseView, RestoreDatabaseView, DeleteBackupView, BackupListView
 
 app_name = 'app'
@@ -51,4 +52,10 @@ urlpatterns = [
     path('agente/crear/', AgenteCreateView.as_view(), name='agente_crear'),
     path('agente/editar/<int:pk>/', AgenteUpdateView.as_view(), name='agente_editar'),
     path('agente/eliminar/<int:pk>/', AgenteDeleteView.as_view(), name='agente_eliminar'),
+
+    ### CRUD ACTIVO ###
+    path('activo/listar/', ActivoListView.as_view(), name='activo_lista'),
+    path('activo/crear/', ActivoCreateView.as_view(), name='activo_crear'),
+    path('activo/editar/<int:pk>/', ActivoUpdateView.as_view(), name='activo_editar'),
+    path('activo/eliminar/<int:pk>/', ActivoDeleteView.as_view(), name='activo_eliminar'),
 ]

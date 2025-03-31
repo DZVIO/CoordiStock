@@ -3,25 +3,27 @@
 {% block columnas %}
 <tr>
     <th scope="col">id</th>
-    <th scope="col">Terminal</a></th>
-    <th scope="col">Nombre</th>
-    <th scope="col">Direccion</th>
+    <th scope="col">Tipo</th>
+    <th scope="col">Activo fijo</th>
+    <th scope="col">Marca</a></th>
+    <th scope="col">Categoria</th>
     <th scope="col">Estado</th>
     <th scope="col">Opciones</th>
 </tr>
 {% endblock %}
 
 {% block filas %}
-{% for t in object_list %}
+{% for a in object_list %}
 <tr>
-    <td>{{ t.id }}</td>
-    <td>{{ t.terminal }}</td>
-    <td>{{ t.nombre }}</td>
-    <td>{{ t.direccion }}</td>
-    <td>{{ t.estado | yesno:"Activo,Inactivo" }}</td>
+    <td>{{ a.id }}</td>
+    <td>{{ a.tipo | yesno:"Activo,Periferico"}}</td>
+    <td>{{ a.activo }}</td>
+    <td>{{ a.id_marca }}</td>
+    <td>{{ a.categoria }}</td>
+    <td>{{ a.estado | yesno:"Activo,Inactivo" }}</td>
     <td>
-        <a href="{% url 'app:terminal_editar' t.id %}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
-        <a href="{% url 'app:terminal_eliminar' t.id %}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
+        <a href="{% url 'app:activo_editar' a.id %}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
+        <a href="{% url 'app:activo_eliminar' a.id %}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
     </td>
 </tr>
 {% endfor %}
@@ -33,7 +35,7 @@
             responsive: true,
             initComplete: function () {
                 var api = this.api();
-                var columnNames = ['id', 'Terminal', 'Nombre', 'Direccion', 'Estado', 'Opciones'];
+                var columnNames = ['id','Tipo', 'Activo fijo', 'Marca', 'Categoria', 'Estado', 'Opciones'];
                 var excludedColumnIndex = columnNames.indexOf('Opciones');
                 api.columns().every(function (index) {
                     var column = this;

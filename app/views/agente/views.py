@@ -79,6 +79,15 @@ class AgenteCreateView(CreateView):
         success_url = reverse('app:agente_crear') + '?created=True'
         return redirect(success_url)
 
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        
+        errores = {field: error.get_json_data() for field, error in form.errors.items()}
+        
+        if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'errors': errores}, status=400)
+        
+        return response
 ###### EDITAR ######
 
 @method_decorator(never_cache, name='dispatch')

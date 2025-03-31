@@ -8,7 +8,6 @@
     <th scope="col">Tipo de documento</th>
     <th scope="col">Número de documento</th>
     <th scope="col">Email</th>
-    <th scope="col">Prefijo</th>
     <th scope="col">Teléfono</th>
     <th scope="col">Area</th>
     <th scope="col">Modalidad</th>
@@ -28,15 +27,14 @@
     <td>{{ a.tipo_documento }}</td>
     <td>{{ a.numero_documento }}</td>
     <td>{{ a.email }}</td>
-    <td>{{ a.prefijo }}</td>
     <td>{{ a.telefono }}</td>
     <td>{{ a.id_area }}</td>
     <td>{{ a.modalidad }}</td>
     <td>{{ a.ubicacion }}</td>
     <td>{{ a.estado | yesno:"Activo,Inactivo" }}</td>
     <td>
-        <a href="{% url 'app:terminal_editar' a.id %}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
-        <a href="{% url 'app:terminal_eliminar' a.id %}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
+        <a href="{% url 'app:agente_editar' a.id %}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
+        <a href="{% url 'app:agente_eliminar' a.id %}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
     </td>
 </tr>
 {% endfor %}
@@ -48,7 +46,7 @@
             responsive: true,
             initComplete: function () {
                 var api = this.api();
-                var columnNames = ['id', 'Nombre', 'Codigo', 'Tipo de documento', 'Numero de documento', 'Email', 'Prefijo', 'Telefono', 'Area', 'Modalidad', 'Ubicacion', 'Estado', 'Opciones'];
+                var columnNames = ['id', 'Nombre', 'Codigo', 'Tipo de documento', 'Numero de documento', 'Email', 'Telefono', 'Area', 'Modalidad', 'Ubicacion', 'Estado', 'Opciones'];
                 var excludedColumnIndex = columnNames.indexOf('Opciones');
                 api.columns().every(function (index) {
                     var column = this;

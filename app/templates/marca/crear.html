@@ -38,7 +38,7 @@
 
     Swal.fire({
         title: 'Error',
-        text: 'Ya existe una area con este nombre.',
+        text: 'Ya existe una marca con este nombre.',
         icon: 'error',
         confirmButtonText: 'Aceptar',
         confirmButtonColor: '#04644b'
@@ -46,25 +46,25 @@
     {% elif request.GET.created %}
     Swal.fire({
         title: 'Éxito',
-        text: 'Area registrada con éxito.',
+        text: 'Marca registrada con éxito.',
         icon: 'success',
         confirmButtonText: 'Aceptar',
         confirmButtonColor: '#04644b'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = "{% url 'app:area_lista' %}";
+            window.location.href = "{% url 'app:marca_lista' %}";
         }
     });
     {% elif request.GET.updated %}
     Swal.fire({
         title: 'Éxito',
-        text: 'Area editada con éxito.',
+        text: 'Marca editada con éxito.',
         icon: 'success',
         confirmButtonText: 'Aceptar',
         confirmButtonColor: '#04644b'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = "{% url 'app:area_lista' %}";
+            window.location.href = "{% url 'app:marca_lista' %}";
         }
     });
     {% endif %}

@@ -18,20 +18,23 @@ class TerminalForm(ModelForm):
         model = Terminal
         fields = "__all__"
         widgets = {
-            "terminal": TextInput(
+            "terminal": Select(
                 attrs={
-                    "placeholder": "Terminal",
-                }
-            ),
-            "ciudad": Select(
-                attrs={
-                    'id': 'ciudad',
-                    'placeholder': 'Ciudad',
+                    'id': 'terminal',
+                    'placeholder': 'Terminal',
                     'class': 'form-control',
-                    'name': 'ciudad'
+                    'name': 'Terminal'
                 }
             ),
-            "diereccion": TextInput(
+            "nombre": TextInput(
+                attrs={
+                    'id': 'nombre',
+                    'placeholder': 'Nombre de la terminal',
+                    'class': 'form-control',
+                    'name': 'nombre'
+                }
+            ),
+            "direccion": TextInput(
                 attrs={
                     "placeholder": "Dirección",
                 }
@@ -81,13 +84,13 @@ class AreaForm(ModelForm):
         widgets = {
             "area": TextInput(
                 attrs={
-                    "placeholder": "Marca",
+                    "placeholder": "Area",
                 }
             ),
             "estado": Select(
                 choices=[(True, "Activo"), (False, "Inactivo")],
                 attrs={
-                    "placeholder": "Estado de la marca",
+                    "placeholder": "Estado de la area",
                 }
             )
         }
@@ -102,13 +105,13 @@ class AgenteForm(ModelForm):
     def validar_num_doc_rep(self):
         numero_documento = self.cleaned_data.get("numero_documento")
         if Agente.objects.filter(numero_documento=numero_documento).exists():
-            raise ValidationError("Ya hay un cliente registrado con este número de documento.")
+            raise ValidationError("Ya hay un agente registrado con este número de documento.")
         return numero_documento
             
     def validar_email_rep(self):
         email = self.cleaned_data.get("email")
         if Agente.objects.filter(email=email).exists():
-            raise ValidationError("Ya hay un cliente registrado con este email.")
+            raise ValidationError("Ya hay un agente registrado con este email.")
         return email
     
     class Meta:
@@ -118,7 +121,7 @@ class AgenteForm(ModelForm):
             "nombre": TextInput(
                 attrs={
                     'id': 'nombre',
-                    "placeholder": "Nombre del cliente",
+                    "placeholder": "Nombre del agente",
                     'class': 'form-control',
                     'name': "nombre",
                 }
@@ -155,14 +158,6 @@ class AgenteForm(ModelForm):
                     'name': "email",
                 }
             ),
-            "pais_telefono": Select(
-                attrs={
-                    'id': 'pais_telefono',
-                    "placeholder": "Tipo de documento",
-                    'class': 'form-control',
-                    'name': "pais_telefono",
-                }   
-            ),
             "telefono": NumberInput(
                 attrs={
                     'id': 'telefono',
@@ -187,15 +182,22 @@ class AgenteForm(ModelForm):
 class ActivoForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["activo"].widget.attrs["autofocus"] = True
-
+        self.fields["tipo"].widget.attrs["autofocus"] = True
     class Meta:
         model = Activo
         fields = "__all__"
         exclude = ["fecha_reg"]
         widgets = {
-            'renting': Select(
-                choices=[(True, "Renting"), (False, "No")],
+            'tipo': Select(
+                choices=[(True, "Activo"), (False, "Periferico")],
+            ),
+            'categoria': Select(
+                attrs={
+                    'id': 'categoria',
+                    "placeholder": "Categoria",
+                    'class': 'form-control',
+                    'name': "categoria",
+                }
             ),
             'activo': NumberInput(
                 attrs={
@@ -205,12 +207,15 @@ class ActivoForm(ModelForm):
                     'name': "activo",
                 }   
             ),
-            'categoria': Select(
+            'renting': Select(
+                choices=[(True, "Renting"), (False, "No")],
+            ),
+            'nomenclatura': TextInput(
                 attrs={
-                    'id': 'categoria',
-                    "placeholder": "Categoria",
-                    'class': 'form-control',
-                    'name': "categoria",
+                    'id': 'nomenclatura',
+                    "placeholder": "Nomenclatura",    
+                    'class': 'form-control',    
+                    'name': "nomenclatura",
                 }
             ),
             'modelo': TextInput(
@@ -235,15 +240,6 @@ class ActivoForm(ModelForm):
                     "placeholder": "Observaciones",
                     'class': 'form-control',
                     'name': "observaciones",
-                }
-            ),
-            'garantia': Select(
-                choices=[(True, "Activa"), (False, "Inactiva")],
-                attrs={
-                    'id': 'garantia',
-                    "placeholder": "Garantía",
-                    'class': 'form-control',
-                    'name': "garantia",
                 }
             ),
             'estado': Select(

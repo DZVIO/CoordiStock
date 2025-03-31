@@ -10,12 +10,12 @@ from django.core.validators import MinLengthValidator
 ####################################################################################################
 
 class Terminal(models.Model):
-    terminal = models.CharField(max_length=50, verbose_name="Terminal", unique=True)
-    ciudad = models.CharField(max_length=50, choices=[(ciudad, ciudad) for ciudad in ciudades_colombia], default='Bogotá ()', verbose_name="Ciudad")
+    terminal = models.CharField(max_length=50, choices=[(ciudad, ciudad) for ciudad in ciudades_colombia], default='Bogotá ()', verbose_name="Ciudad")
+    nombre = models.CharField(max_length=50, verbose_name="Nombre")
     direccion = models.CharField(max_length=50, verbose_name="Dirección")
     estado = models.BooleanField(default=True, verbose_name="Estado")
     def __str__(self):
-        return f"{self.terminal} - {self.ciudad}: {self.direccion}"
+        return f"{self.terminal} - {self.nombre} - {self.direccion}"
 
     class Meta:
         verbose_name= "terminal"
@@ -77,11 +77,11 @@ class Agente(models.Model):
     tipo_documento = models.CharField(max_length=3, choices=TipoDocumento.choices, default=TipoDocumento.CC, verbose_name="Tipo de documento")
     numero_documento = models.PositiveIntegerField(verbose_name="Número de documento", unique=True)
     email = models.EmailField(max_length=50, verbose_name="Email", validators=[validate_email])
-    pais_telefono = models.CharField(max_length=50, choices=[(pais, pais) for pais in codigos_telefonicos_paises], default='Colombia (+57)', verbose_name="Prefijo telefónico")
     telefono = models.PositiveIntegerField(verbose_name="Teléfono")
     modalidad = models.CharField(max_length=2, choices=Modalidad.choices, default=Modalidad.PR, verbose_name="Modalidad")
     ubicacion = models.CharField(max_length=50, verbose_name="Dirección")
     estado = models.BooleanField(default=True, verbose_name="Estado")
+    id_terminal = models.ForeignKey(Terminal, on_delete=models.PROTECT, verbose_name="Terminal")
     id_area = models.ForeignKey(Area, on_delete=models.PROTECT, verbose_name="Area")
 
     def __str__(self):
@@ -98,24 +98,58 @@ class Activo(models.Model):
     class categorias(models.TextChoices):
         PC = 'PC', 'PC'
         LAPTOP = 'Laptop', 'Laptop'
-        PERIFERICOS = 'Perifericos', 'Perifericos'
+        MONITOR = 'Monitor', 'Monitor'
+        DIADEMA = 'Diadema', 'Diadema'
+        TECLADO = 'Teclado', 'Teclado'
+        MOUSE = 'Mouse', 'Mouse'
+        BASE_R = 'Base Refrigerante', 'Base Refrigerante'
 
     fecha_reg = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de registro")
+    tipo = models.BooleanField(default=True, verbose_name="Tipo")
+    categoria = models.CharField(max_length=50, choices=categorias.choices, verbose_name="Categoría")
+    id_marca = models.ForeignKey(Marca, on_delete=models.PROTECT, verbose_name="Marca")
+    activo = models.PositiveIntegerField(verbose_name="Activo", unique=True, blank=True, null=True)
     renting = models.BooleanField(default=False, verbose_name="Renting")
-    activo = models.PositiveIntegerField(verbose_name="Activo", unique=True)
-    categoria = models.CharField(max_length=50, choices=categorias.choices, default=categorias.PC, verbose_name="Categoría")
+    nomenclatura = models.CharField(max_length=50, verbose_name="Nomenclatura", unique=True, blank=True, null=True)
     modelo = models.CharField(max_length=50, verbose_name="Modelo")
     n_serie = models.CharField(max_length=50, verbose_name="N. de serie", unique=True)
-    observaciones = models.CharField(max_length=300, verbose_name="Observaciones")
-    garantia = models.BooleanField(default=True, verbose_name="Garantía")
-    estado = models.BooleanField(default=True, verbose_name="Estado")
-    id_terminal = models.ForeignKey(Terminal, on_delete=models.PROTECT, verbose_name="Terminal")
-    id_marca = models.ForeignKey(Marca, on_delete=models.PROTECT, verbose_name="Marca")
     id_agente = models.ForeignKey(Agente, on_delete=models.PROTECT, verbose_name="Agente")
     id_area = models.ForeignKey(Area, on_delete=models.PROTECT, verbose_name="Area")
+    observaciones = models.CharField(max_length=300, verbose_name="Observaciones")
+    id_terminal = models.ForeignKey(Terminal, on_delete=models.PROTECT, verbose_name="Terminal")
+    estado = models.BooleanField(default=True, verbose_name="Estado")
 
     def __str__(self):
         return f"{self.activo}"
+    def clean(self):
+        if self.categoria == self.categorias.MONITOR and self.renting:
+            raise ValidationError({'renting': 'Las pantallas no pueden ser de renting.'})
+
+        if self.categoria == self.categorias.MONITOR and self.nomenclatura:
+            raise ValidationError({'nomenclatura': 'Las pantallas no requieren una nomenclatura.'})
+
+        if self.renting and self.id_area.area.lower() not in ["call center", "t.i"]:
+            raise ValidationError({'id_area': 'Los equipos en renting solo pueden asignarse a las áreas de Call Center o T.I.'})
+
+        if self.categoria in [self.categorias.PC, self.categorias.LAPTOP] and not self.nomenclatura:
+            raise ValidationError({'nomenclatura': 'Las laptops y PCs requieren una nomenclatura obligatoria.'})
+
+        perifericos = [
+            self.categorias.DIADEMA, 
+            self.categorias.TECLADO, 
+            self.categorias.MOUSE, 
+            self.categorias.BASE_R, 
+        ]
+
+        if self.categoria not in perifericos:
+            activo_str = str(self.activo)
+            if self.renting and len(activo_str) != 8:
+                raise ValidationError({'activo': 'Si el equipo es de renting, el activo debe tener 8 dígitos.'})
+            elif not self.renting and len(activo_str) != 5:
+                raise ValidationError({'activo': 'Si el equipo NO es de renting, el activo debe tener 5 dígitos.'})
+
+        if self.renting and self.id_agente.id_area.area.lower() not in ["call center", "t.i"]:
+            raise ValidationError({'id_agente': 'Un equipo en renting solo puede asignarse a un agente de Call Center o T.I.'})
 
     class Meta:
         verbose_name= "activo"
