@@ -210,14 +210,6 @@ class ActivoForm(ModelForm):
             'renting': Select(
                 choices=[(True, "Renting"), (False, "No")],
             ),
-            'nomenclatura': TextInput(
-                attrs={
-                    'id': 'nomenclatura',
-                    "placeholder": "Nomenclatura",    
-                    'class': 'form-control',    
-                    'name': "nomenclatura",
-                }
-            ),
             'modelo': TextInput(
                 attrs={
                     'id': 'modelo',
@@ -234,13 +226,8 @@ class ActivoForm(ModelForm):
                     'name': "n_serie",
                 }
             ),
-            'observaciones': TextInput(
-                attrs={
-                    'id': 'observaciones',
-                    "placeholder": "Observaciones",
-                    'class': 'form-control',
-                    'name': "observaciones",
-                }
+            'disponibilidad': Select(
+                choices=[(True, "Disponible"), (False, "No disponible")]
             ),
             'estado': Select(
                 choices=[(True, "Activo"), (False, "Inactivo")],
@@ -467,18 +454,25 @@ class OperadorForm(ModelForm):
 #############################################################################
 
 class MovimientoForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
     class Meta:
         model = Movimiento
         fields = "__all__"
         exclude = ['fecha_mov']
         widgets = {
-            "motivo": TextInput(
+            "tipo_mov": Select(
                 attrs={
-                    'id': 'motivo',
-                    'placeholder': 'Motivo',
+                    'id': 'tipo_mov',
+                    'placeholder': 'Tipo de movimiento',
                     'class': 'form-control',
-                    'name': "motivo",
+                    'name': "tipo_mov",
                 }
             ),
             
         }
+
+#############################################################################
+
+

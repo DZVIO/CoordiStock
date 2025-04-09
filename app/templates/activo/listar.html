@@ -1,64 +1,154 @@
 {% extends 'listar.html' %}
+{% load static %}
 
 {% block columnas %}
-<tr>
-    <th scope="col">id</th>
-    <th scope="col">Tipo</th>
-    <th scope="col">Activo fijo</th>
-    <th scope="col">Marca</a></th>
-    <th scope="col">Categoria</th>
-    <th scope="col">Estado</th>
-    <th scope="col">Opciones</th>
-</tr>
+    <tr>
+        <!-- <th scope="col">Agente</th> -->
+        <th scope="col">id</th>
+        <th scope="col">Tipo</th>
+        <th scope="col">Activo fijo</th>
+        <th scope="col">Marca</a></th>
+        <th scope="col">Categoria</th>
+        <th scope="col">Estado</th>
+        <!-- <th scope="col">Opciones</th> -->
+        <th scope="col">Linea de tiempo</th>
+    </tr>
+
 {% endblock %}
 
 {% block filas %}
 {% for a in object_list %}
 <tr>
-    <td>{{ a.id }}</td>
-    <td>{{ a.tipo | yesno:"Activo,Periferico"}}</td>
+    <!-- <td>{{ a.id_agente }}</td> -->
+    <td>{{ a.id }}</td> 
+    <td>{{ a.tipo | yesno:"Activo,Periférico"}}</td>
     <td>{{ a.activo }}</td>
     <td>{{ a.id_marca }}</td>
     <td>{{ a.categoria }}</td>
     <td>{{ a.estado | yesno:"Activo,Inactivo" }}</td>
     <td>
+        <button id="LineaTiempo-{{ a.id }}" type="button" data-toggle="modal" data-target="#modal-{{ a.id }}">
+            <i class="fas fa-search"></i>
+        </button>
+        <div class="modal fade" id="modal-{{ a.id }}" tabindex="-1" role="dialog"
+            aria-labelledby="ventaModalLabel-{{ item.venta.id }}" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered custom-width-modal" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ventaModalLabel-{{ item.venta.id }}">Linea de Tiempo<b>
+                                #{{a.id}}</b></b></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="captura">
+                        <ul class="timeline">
+                            <li class="event" data-date="{{ a.fecha_reg }}">
+                                <div class="member-infos">
+                                    <h1 class='movement-title'>Registro de activo:</h1>
+                                    <div class="activoinfo">
+                                        <table>
+                                            <tr>
+                                                <th>Fecha de registro:</th>
+                                                <td>{{ a.fecha_reg }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Tipo:</th>
+                                                <td>{{ a.tipo | yesno:"Activo,Periferico"}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Categoria:</th>
+                                                <td>{{ a.categoria }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Marca:</th>
+                                                <td>{{ a.id_marca }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Activo fijo:</th>
+                                                <td>{{ a.activo }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Renting:</th>
+                                                <td>{{ a.renting|yesno:"Renting,No" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Modelo:</th>
+                                                <td>{{ a.modelo }}</td>
+                                            </tr>
+                                            <tr>
+                                            <tr>
+                                                <th>N° de serie:</th>
+                                                <td>{{ a.n_serie }}</td>
+                                            </tr> 
+                                            <tr>
+                                                <th>Estado:</th>
+                                                <td>{{ a.estado | yesno:"Activo,Inactivo" }}</td>
+                                            </tr> 
+                                        </table>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="event" data-date="fecha movimiento">
+                                <!-- MOVIMIENTO y DETALLE-->
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </td>
+    <!-- <td>
         <a href="{% url 'app:activo_editar' a.id %}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
         <a href="{% url 'app:activo_eliminar' a.id %}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
-    </td>
+    </td> -->
 </tr>
 {% endfor %}
 {% endblock %}
 {% block javascript %}
 <script type="application/javascript">
     $(document).ready(function () {
-        $("#tabla").DataTable({
+        var table = $("#tabla").DataTable({
             responsive: true,
             initComplete: function () {
                 var api = this.api();
-                var columnNames = ['id','Tipo', 'Activo fijo', 'Marca', 'Categoria', 'Estado', 'Opciones'];
-                var excludedColumnIndex = columnNames.indexOf('Opciones');
-                api.columns().every(function (index) {
-                    var column = this;
-                    var header = $(column.header());
-                    if (index !== excludedColumnIndex) {
-                        var filterContainer = $('<div class="filter-container"></div>').appendTo(header.empty());
-                        $('<label>' + columnNames[index] + '</label>').appendTo(filterContainer);
-                        var select = $('<select><option value="">Todos</option></select>')
-                            .appendTo(filterContainer)
+                var filterOptions = {
+                    'Tipo': ['Activo', 'Periférico'],
+                    'Estado': ['Activo', 'Inactivo'],
+                    'Categoria': ['PC','Laptop','Monitor','Diadema','Teclado','Mouse','Base Refrigerante']
+                };
+            
+                $('#tabla thead th').each(function (index) {
+                    var columnTitle = $(this).text().trim();
+                    var header = $(this);
+            
+                    var filterContainer = $('<div class="filter-container"></div>');
+            
+                    if (filterOptions[columnTitle]) {
+                        var select = $('<select class="column-select"><option value="">Todos</option></select>')
                             .on('change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
-                                column
-                                    .search(val ? '^' + val + '$' : '', true, false)
-                                    .draw();
+                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                table.column(index).search(val ? '^' + val + '$' : '', true, false).draw();
                             });
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d + '</option>');
+            
+                        filterOptions[columnTitle].forEach(function (option) {
+                            select.append('<option value="' + option + '">' + option + '</option>');
                         });
-                    } else {
-                        $('<label>' + columnNames[index] + '</label>').appendTo(header.empty());
+            
+                        filterContainer.append(select);
+                    } else if (columnTitle !== 'Linea de tiempo' && columnTitle !== 'id') {
+                        var input = $('<input type="text" placeholder="Buscar ' + columnTitle + '" class="column-search" />');
+                        filterContainer.append(input);
                     }
+            
+                    header.append(filterContainer);
+                });
+            
+                $('.column-search').on('keyup change', function () {
+                    var colIndex = $(this).parent().parent().index();
+                    table.column(colIndex).search(this.value).draw();
                 });
             }
         });

@@ -891,3 +891,28 @@ document.addEventListener('DOMContentLoaded', function () {
        });
     });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    $('.movement-title').click(function() {
+        console.log("Clicked");
+        $(this).closest('.member-infos').find('.activoinfo').slideToggle(600);
+    });
+
+    $('.activoinfo').each(function () {
+        let categoria = $(this).find('tr:has(th:contains("Categoria")) td').text().trim().toLowerCase();
+        console.log("Categoría detectada:", categoria);  // Verifica la categoría en la consola
+
+        if (categoria === "monitor") {
+            $(this).find('tr:has(th:contains("Renting")), tr:has(th:contains("Nomenclatura"))').hide();
+        }
+    });
+
+    $('.activoinfo').each(function () {
+        let tipo = $(this).find('tr:has(th:contains("Tipo")) td').text().trim().toLowerCase();
+        console.log("Tipo detectado:", tipo);  // Verifica la categoría en la consola
+
+        if (tipo === "periferico") {
+            $(this).find('tr:has(th:contains("Renting")), tr:has(th:contains("Activo"))').hide();
+        }
+    });
+});

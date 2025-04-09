@@ -32,7 +32,6 @@
         const tipoField = document.getElementById("id_tipo");
         const categoriaField = document.getElementById("categoria");
         const activoField = document.getElementById("activo");
-        const nomenclaturaField = document.getElementById("nomenclatura");
         const rentingField = document.getElementById("id_renting");
 
         const categoriasPorTipo = {
@@ -41,14 +40,13 @@
         };
 
         function toggleFields() {
-            if (!categoriaField || !rentingField || !nomenclaturaField || !activoField) return;
+            if (!categoriaField || !rentingField || !activoField) return;
 
             const categoria = categoriaField.value;
             
             if (tipoField.value === "False") {
                 activoField.closest('.form-group').style.display = "none";
                 rentingField.closest('.form-group').style.display = "none";
-                nomenclaturaField.closest('.form-group').style.display = "none";
                 return;
             }
 
@@ -56,15 +54,12 @@
 
             if (categoria === "Monitor") {
                 rentingField.closest('.form-group').style.display = "none";
-                nomenclaturaField.closest('.form-group').style.display = "none";
             } 
             else if (categoria === "PC") {
                 rentingField.closest('.form-group').style.display = "none";
-                nomenclaturaField.closest('.form-group').style.display = "block";
             } 
             else {
                 rentingField.closest('.form-group').style.display = "block";
-                nomenclaturaField.closest('.form-group').style.display = "block";
             }
         }
 

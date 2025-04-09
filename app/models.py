@@ -110,13 +110,9 @@ class Activo(models.Model):
     id_marca = models.ForeignKey(Marca, on_delete=models.PROTECT, verbose_name="Marca")
     activo = models.PositiveIntegerField(verbose_name="Activo", unique=True, blank=True, null=True)
     renting = models.BooleanField(default=False, verbose_name="Renting")
-    nomenclatura = models.CharField(max_length=50, verbose_name="Nomenclatura", unique=True, blank=True, null=True)
     modelo = models.CharField(max_length=50, verbose_name="Modelo")
     n_serie = models.CharField(max_length=50, verbose_name="N. de serie", unique=True)
-    id_agente = models.ForeignKey(Agente, on_delete=models.PROTECT, verbose_name="Agente")
-    id_area = models.ForeignKey(Area, on_delete=models.PROTECT, verbose_name="Area")
-    observaciones = models.CharField(max_length=300, verbose_name="Observaciones")
-    id_terminal = models.ForeignKey(Terminal, on_delete=models.PROTECT, verbose_name="Terminal")
+    disponibilidad = models.BooleanField(default=True, verbose_name="Disponibilidad")
     estado = models.BooleanField(default=True, verbose_name="Estado")
 
     def __str__(self):
@@ -125,14 +121,14 @@ class Activo(models.Model):
         if self.categoria == self.categorias.MONITOR and self.renting:
             raise ValidationError({'renting': 'Las pantallas no pueden ser de renting.'})
 
-        if self.categoria == self.categorias.MONITOR and self.nomenclatura:
-            raise ValidationError({'nomenclatura': 'Las pantallas no requieren una nomenclatura.'})
+        # if self.categoria == self.categorias.MONITOR and self.nomenclatura:
+        #     raise ValidationError({'nomenclatura': 'Las pantallas no requieren una nomenclatura.'})
 
-        if self.renting and self.id_area.area.lower() not in ["call center", "t.i"]:
-            raise ValidationError({'id_area': 'Los equipos en renting solo pueden asignarse a las áreas de Call Center o T.I.'})
+        # if self.renting and self.id_area.area.lower() not in ["call center", "t.i"]:
+        #     raise ValidationError({'id_area': 'Los equipos en renting solo pueden asignarse a las áreas de Call Center o T.I.'})
 
-        if self.categoria in [self.categorias.PC, self.categorias.LAPTOP] and not self.nomenclatura:
-            raise ValidationError({'nomenclatura': 'Las laptops y PCs requieren una nomenclatura obligatoria.'})
+        # if self.categoria in [self.categorias.PC, self.categorias.LAPTOP] and not self.nomenclatura:
+        #     raise ValidationError({'nomenclatura': 'Las laptops y PCs requieren una nomenclatura obligatoria.'})
 
         perifericos = [
             self.categorias.DIADEMA, 
@@ -148,8 +144,8 @@ class Activo(models.Model):
             elif not self.renting and len(activo_str) != 5:
                 raise ValidationError({'activo': 'Si el equipo NO es de renting, el activo debe tener 5 dígitos.'})
 
-        if self.renting and self.id_agente.id_area.area.lower() not in ["call center", "t.i"]:
-            raise ValidationError({'id_agente': 'Un equipo en renting solo puede asignarse a un agente de Call Center o T.I.'})
+        # if self.renting and self.id_agente.id_area.area.lower() not in ["call center", "t.i"]:
+        #     raise ValidationError({'id_agente': 'Un equipo en renting solo puede asignarse a un agente de Call Center o T.I.'})
 
     class Meta:
         verbose_name= "activo"
@@ -246,9 +242,16 @@ def eliminar_usuario_relacionado(sender, instance, **kwargs):
 ###################################################################################################
 
 class Movimiento(models.Model):
+    class t_m(models.TextChoices):
+        ASIGNACION = 'ASIGNACION', 'Asignacion'
+        MANTENIMIENTO = 'MANTENIMIENTO', 'Mantenimiento'
+        PRESTAMO = 'PRESTAMO', 'Prestamo'
+        TRASLADO = 'TRASLADO', 'Traslado'
+        D_FINAL = 'D_FINAL', 'Dispocicion final'
+
     fecha_mov = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de movimiento")
-    motivo = models.CharField(max_length=50, verbose_name="Motivo")
-    ubicacion = models.CharField(max_length=50, verbose_name="Ubicación")
+    tipo_mov = models.CharField(max_length=50, choices=t_m.choices, default=t_m.PRESTAMO, verbose_name="Tipo de movimiento")
+    id_terminal = models.ForeignKey(Terminal, on_delete=models.PROTECT, verbose_name="Terminal")
 
     def __str__(self):
         return f"{self.fecha_mov}"
@@ -261,17 +264,13 @@ class Movimiento(models.Model):
 ####################################################################################################
 
 class Detalle_movimiento(models.Model):
-    class t_m(models.TextChoices):
-        MANTENIMIENTO = 'Mantenimiento', 'Mantenimiento'
-        PRESTAMO = 'Prestamo', 'Prestamo'
-        ASIGNACION = 'Asignacion', 'Asignacion'
-        TRASLADO = 'Traslado', 'Traslado'
-        D_FINAL = 'Dispocicion final', 'Dispocicion final'
-
-    tipo_mov = models.CharField(max_length=50, choices=t_m.choices, default=t_m.PRESTAMO, verbose_name="Tipo de movimiento")
-    id_activo = models.ForeignKey(Activo, on_delete=models.PROTECT, verbose_name="Activo")
     id_movimiento = models.ForeignKey(Movimiento, on_delete=models.PROTECT, verbose_name="Movimiento")
+    id_activo = models.ForeignKey(Activo, on_delete=models.PROTECT, verbose_name="Activo")
+    motivo = models.CharField(max_length=300, verbose_name="Motivo", )
     id_agente = models.ForeignKey(Agente, on_delete=models.PROTECT, verbose_name="Agente")
+    nomenclatura = models.CharField(max_length=50, verbose_name="Nomenclatura", blank=True, null=True)
+    id_area = models.ForeignKey(Area, on_delete=models.PROTECT, verbose_name="Area")
+    observaciones = models.CharField(max_length=300, verbose_name="Observaciones")
 
     def __str__(self):
         return f"{self.id_movimiento}"

@@ -63,15 +63,6 @@ class ActivoCreateView(CreateView):
         context['listar_url'] = reverse_lazy('app:activo_lista')
         return context
     
-    def form_valid(self, form):
-        activo = form.cleaned_data.get('activo')
-
-        if Activo.objects.filter(activo=activo).exists():
-            form.add_error('Ya existe un equipo registrado con ese activo fijo.')
-            return self.form_invalid(form)
-
-        return super().form_valid(form)
-
 ###### EDITAR ######
 
 @method_decorator(never_cache, name='dispatch')
