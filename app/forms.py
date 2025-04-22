@@ -101,6 +101,7 @@ class AgenteForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["nombre"].widget.attrs["autofocus"] = True
+        self.fields["ubicacion"].required = False   
 
     def validar_num_doc_rep(self):
         numero_documento = self.cleaned_data.get("numero_documento")
@@ -113,6 +114,12 @@ class AgenteForm(ModelForm):
         if Agente.objects.filter(email=email).exists():
             raise ValidationError("Ya hay un agente registrado con este email.")
         return email
+    
+    def validar_codigo_rep(self):
+        codigo = self.cleaned_data.get("codigo")
+        if Agente.objects.filter(codigo=codigo).exists():
+            raise ValidationError("Ya hay un agente registrado con este codigo.")
+        return codigo
     
     class Meta:
         model = Agente
@@ -164,6 +171,22 @@ class AgenteForm(ModelForm):
                     "placeholder": "Teléfono",
                     'class': 'form-control',
                     'name': "telefono",
+                }
+            ),
+            "modalidad": Select(
+                attrs={
+                    'id': 'modalidad',
+                    "placeholder": "Modalidad",
+                    'class': 'form-control',
+                    'name': "modalidad",
+                }
+            ),
+            "ubicacion": TextInput(
+                attrs={
+                    'id': 'ubicacion',
+                    'placeholder': 'ubicacion',
+                    'class': 'form-control',
+                    'name': 'ubocaion',
                 }
             ),
             "estado": Select(
@@ -469,10 +492,44 @@ class MovimientoForm(ModelForm):
                     'class': 'form-control',
                     'name': "tipo_mov",
                 }
-            ),
-            
+            ),  
         }
 
 #############################################################################
 
+class DetalleMovimientoForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["motivo"].widget.attrs["autofocus"] = True
+        self.fields["id_activo"].queryset = Activo.objects.all()
 
+    class Meta: 
+        model = Detalle_movimiento
+        fields = "__all__"
+        whidgets = {
+            "motivo": TextInput(
+                attrs={
+                    'id': 'motivo',
+                    "placeholder": "Motivo",
+                    'class': 'form-control',
+                    'name': "motivo",
+                }
+            ),
+            "nomenclatura": TextInput(
+                attrs={
+                    'id': 'nomenclatura',
+                    "placeholder": "Nomenclatura",
+                    'class': 'form-control',
+                    'name': "nomenclatura",
+                }  
+            ),
+            "observaciones": TextInput(
+                attrs={
+                    'id': 'observaciones',
+                    "placeholder": "Observaciones",
+                    'class': 'form-control',
+                    'name': "observaciones",
+                }
+            )
+        }
+        

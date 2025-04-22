@@ -78,11 +78,11 @@ class Agente(models.Model):
     numero_documento = models.PositiveIntegerField(verbose_name="Número de documento", unique=True)
     email = models.EmailField(max_length=50, verbose_name="Email", validators=[validate_email])
     telefono = models.PositiveIntegerField(verbose_name="Teléfono")
-    modalidad = models.CharField(max_length=2, choices=Modalidad.choices, default=Modalidad.PR, verbose_name="Modalidad")
-    ubicacion = models.CharField(max_length=50, verbose_name="Dirección")
-    estado = models.BooleanField(default=True, verbose_name="Estado")
-    id_terminal = models.ForeignKey(Terminal, on_delete=models.PROTECT, verbose_name="Terminal")
     id_area = models.ForeignKey(Area, on_delete=models.PROTECT, verbose_name="Area")
+    id_terminal = models.ForeignKey(Terminal, on_delete=models.PROTECT, verbose_name="Terminal")
+    modalidad = models.CharField(max_length=2, choices=Modalidad.choices, default=Modalidad.PR, verbose_name="Modalidad")
+    ubicacion = models.CharField(max_length=50, verbose_name="Ubicación")
+    estado = models.BooleanField(default=True, verbose_name="Estado")
 
     def __str__(self):
         return f"{self.nombre}: {self.codigo} - {self.id_area}"
@@ -243,11 +243,11 @@ def eliminar_usuario_relacionado(sender, instance, **kwargs):
 
 class Movimiento(models.Model):
     class t_m(models.TextChoices):
-        ASIGNACION = 'ASIGNACION', 'Asignacion'
-        MANTENIMIENTO = 'MANTENIMIENTO', 'Mantenimiento'
-        PRESTAMO = 'PRESTAMO', 'Prestamo'
-        TRASLADO = 'TRASLADO', 'Traslado'
-        D_FINAL = 'D_FINAL', 'Dispocicion final'
+        ASIGNACION = 'Asignación', 'Asignación'
+        MANTENIMIENTO = 'Mantenimiento', 'Mantenimiento'
+        PRESTAMO = 'Préstamo', 'Préstamo'
+        TRASLADO = 'Traslado', 'Traslado'
+        D_FINAL = 'Disposición final', 'Disposición final'
 
     fecha_mov = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de movimiento")
     tipo_mov = models.CharField(max_length=50, choices=t_m.choices, default=t_m.PRESTAMO, verbose_name="Tipo de movimiento")

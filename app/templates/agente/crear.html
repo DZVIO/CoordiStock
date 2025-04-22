@@ -12,7 +12,7 @@
         <div class="card-body">
             {% csrf_token %}
             {% for field in form.visible_fields %}
-            <div class="form-group">
+            <div class="form-group" id="group_{{ field.name }}">
                 <label for="text">{{ field.label }}:</label>
                 {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
             </div>
@@ -26,16 +26,40 @@
     </div>
 </form>
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const modalidadfield = document.getElementById("modalidad");
+        const ubicacionGroup = document.getElementById("group_ubicacion");
+        const ubicacionInput = document.getElementById("ubicacion");
+    
+        function toggleFields() {
+            if (!modalidadfield || !ubicacionGroup || !ubicacionInput) return;
+    
+            if (modalidadfield.value === "PR") {
+                ubicacionGroup.style.display = "none";
+                ubicacionInput.readOnly = true;
+            } else {
+                ubicacionGroup.style.display = "block";
+                ubicacionInput.readOnly = false;
+            }
+        }
+    
+        toggleFields();
+    
+        modalidadfield.addEventListener("change", toggleFields);
+    });
+</script>
+
+<script>
     {% if form.errors %}
     var errors = '';
     {% for field in form %}
-        {% for error in field.errors %}
-            errors += '';
-        {% endfor %}
+    {% for error in field.errors %}
+    errors += '';
+    {% endfor %}
     {% endfor %}
 
     {% if form.numero_documento.errors %}
-        errors += ' agente registrado con el mismo número de documento.';
+    errors += ' agente registrado con el mismo número de documento.';
     {% endif %}
 
     Swal.fire({
@@ -45,7 +69,7 @@
         confirmButtonText: 'Aceptar',
         confirmButtonColor: '#04644b'
     });
-{% elif request.GET.created %}
+    {% elif request.GET.created %}
     Swal.fire({
         title: 'Éxito',
         text: 'agente registrado con éxito.',
@@ -57,7 +81,7 @@
             window.location.href = "{% url 'app:agente_lista' %}";
         }
     });
-{% elif request.GET.updated %}
+    {% elif request.GET.updated %}
     Swal.fire({
         title: 'Éxito',
         text: 'Agente editado con éxito.',
@@ -69,6 +93,6 @@
             window.location.href = "{% url 'app:agente_lista' %}";
         }
     });
-{% endif %}
+    {% endif %}
 </script>
 {% endblock %}

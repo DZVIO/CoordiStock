@@ -3,37 +3,19 @@
 {% block columnas %}
 <tr>
     <th scope="col">id</th>
-    <th scope="col">Nombre</a></th>
-    <th scope="col">Codigo</th>
-    <th scope="col">Email</th>
-    <th scope="col">Teléfono</th>
-    <th scope="col">Area</th>
+    <th scope="col">Fecha</a></th>
+    <th scope="col">Tipo de movimiento</th>
     <th scope="col">Terminal</th>
-    <th scope="col">Modalidad</th>
-    <th scope="col">Ubicación</th>
-    <th scope="col">Estado</th>
-    <th scope="col">Opciones</th>
-    
 </tr>
 {% endblock %}
 
 {% block filas %}
-{% for a in object_list %}
+{% for m in object_list %}
 <tr>
-    <td>{{ a.id }}</td>
-    <td>{{ a.nombre }}</td>
-    <td>{{ a.codigo }}</td>
-    <td>{{ a.email }}</td>
-    <td>{{ a.telefono }}</td>
-    <td>{{ a.id_area }}</td>
-    <td>{{ a.id_terminal }}</td>
-    <td>{{ a.modalidad }}</td>
-    <td>{{ a.ubicacion }}</td>
-    <td>{{ a.estado | yesno:"Activo,Inactivo" }}</td>
-    <td>
-        <a href="{% url 'app:agente_editar' a.id %}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
-        <a href="{% url 'app:agente_eliminar' a.id %}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
-    </td>
+    <td>{{ m.id }}</td>
+    <td>{{ m.fecha_mov }}</td>
+    <td>{{ m.tipo_mov }}</td>
+    <td>{{ m.id_terminal }}</td>
 </tr>
 {% endfor %}
 {% endblock %}
@@ -44,7 +26,7 @@
             responsive: true,
             initComplete: function () {
                 var api = this.api();
-                var columnNames = ['id', 'Nombre', 'Codigo', 'Email', 'Telefono', 'Area', 'Terminal',   'Modalidad', 'Ubicacion', 'Estado', 'Opciones'];
+                var columnNames = ['id', 'Fecha', 'Estado', 'Opciones'];
                 var excludedColumnIndex = columnNames.indexOf('Opciones');
                 api.columns().every(function (index) {
                     var column = this;

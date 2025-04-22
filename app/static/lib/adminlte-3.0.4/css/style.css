@@ -337,36 +337,38 @@ h1 {
     color: #ffffff;
 }
 
-.dark-mode .modal-header{
+.dark-mode .modal-header {
     background-attachment: #414141;
 }
 
-.dark-mode .product-rows{
+.dark-mode .product-rows {
     background-color: #414141;
 
 }
 
-.dark-mode .modal-header{
+.dark-mode .modal-header {
     background: #414141;
     color: #ffffff;
 }
 
-.dark-mode .modal-body{
+.dark-mode .modal-body {
     background: #c5c5c5;
     color: #000000;
 }
 
-.dark-mode .modal-footer{
+.dark-mode .modal-footer {
     background: #414141;
     color: #ffffff;
 }
 
-.select2-container--default .select2-results__option--highlighted[aria-selected], .select2-container--default .select2-results__option--highlighted[aria-selected]:hover {
+.select2-container--default .select2-results__option--highlighted[aria-selected],
+.select2-container--default .select2-results__option--highlighted[aria-selected]:hover {
     background-color: #04644B;
     color: black;
 }
 
-.select2-container--default .select2-results__option--highlighted[aria-selected], .select2-container--default .select2-results__option--highlighted[aria-selected]:hover {
+.select2-container--default .select2-results__option--highlighted[aria-selected],
+.select2-container--default .select2-results__option--highlighted[aria-selected]:hover {
     background-color: #04644B;
     color: #fff;
 }
@@ -478,10 +480,10 @@ tr:hover td {
     overflow-x: auto;
     box-sizing: border-box;
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
 }
 
-.invoice-container button, 
+.invoice-container button,
 .invoice-container input[type="number"],
 .invoice-container input[type="text"] {
     max-width: 100%;
@@ -515,11 +517,12 @@ tr:hover td {
     margin-bottom: 30px;
 }
 
-.company-details{
+.company-details {
     margin-right: 5px;
 }
 
-.company-details, .client-details {
+.company-details,
+.client-details {
     width: 45%;
     padding: 15px;
     border: 1px solid #ddd;
@@ -528,14 +531,16 @@ tr:hover td {
     margin-right: 5px;
 }
 
-.company-details label, .client-details label {
+.company-details label,
+.client-details label {
     font-weight: bold;
     margin-bottom: 5px;
     display: inline;
     width: 100px;
 }
 
-.company-details input, .client-details input {
+.company-details input,
+.client-details input {
     width: calc(100% - 20px);
     padding: 10px;
     margin-bottom: 15px;
@@ -544,7 +549,7 @@ tr:hover td {
     box-sizing: border-box;
 }
 
-.client-options{
+.client-options {
     display: flex;
     justify-content: space-between;
     background-color: #e7e7e7;
@@ -552,7 +557,7 @@ tr:hover td {
     border-color: #7e7e7e;
 }
 
-.options{
+.options {
     display: inline-block;
     width: 100%;
     padding: 10px;
@@ -566,15 +571,15 @@ tr:hover td {
 }
 
 .document-type {
-    width: 40%; 
+    width: 40%;
 }
 
 .document-number {
-    width: 70%; 
+    width: 70%;
 }
 
 
-.phone{
+.phone {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -598,7 +603,8 @@ tr:hover td {
     table-layout: fixed;
 }
 
-.product-sale-table th, .product-sale-table td {
+.product-sale-table th,
+.product-sale-table td {
     border: 1px solid #ddd;
     padding: 12px;
     text-align: center;
@@ -622,23 +628,28 @@ tr:hover td {
     padding: 10px;
 }
 
-.product-sale-table th.product-sale-column, .product-sale-table td.product-sale-column {
+.product-sale-table th.product-sale-column,
+.product-sale-table td.product-sale-column {
     width: 28%;
 }
 
-.product-sale-table th.quantity-sale-column, .product-sale-table td.quantity-sale-column {
+.product-sale-table th.quantity-sale-column,
+.product-sale-table td.quantity-sale-column {
     width: 15%;
 }
 
-.product-sale-table th.price-sale-column, .product-sale-table td.price-sale-column {
+.product-sale-table th.price-sale-column,
+.product-sale-table td.price-sale-column {
     width: 15%;
 }
 
-.product-sale-table th.stock-sale-column, .product-sale-table td.stock-sale-column {
+.product-sale-table th.stock-sale-column,
+.product-sale-table td.stock-sale-column {
     width: 12%;
 }
 
-.product-sale-table th.delete-sale-column, .product-sale-table td.delete-sale-column {
+.product-sale-table th.delete-sale-column,
+.product-sale-table td.delete-sale-column {
     width: 14%;
 }
 
@@ -660,7 +671,8 @@ tr:hover td {
     table-layout: fixed;
 }
 
-.product-table th, .product-table td {
+.product-table th,
+.product-table td {
     border: 1px solid #ddd;
     padding: 12px;
     text-align: center;
@@ -682,26 +694,31 @@ tr:hover td {
     box-sizing: border-box;
     text-align: right;
     padding: 10px;
-    
+
 }
 
-.product-table th.product-column, .product-table td.product-column {
+.product-table th.product-column,
+.product-table td.product-column {
     width: 28%;
 }
 
-.product-table th.quantity-column, .product-table td.quantity-column {
+.product-table th.quantity-column,
+.product-table td.quantity-column {
     width: 15%;
 }
 
-.product-table th.price-column, .product-table td.price-column {
+.product-table th.price-column,
+.product-table td.price-column {
     width: 15%;
 }
 
-.product-table th.stock-column, .product-table td.stock-column {
+.product-table th.stock-column,
+.product-table td.stock-column {
     width: 12%;
 }
 
-.product-table th.delete-column, .product-table td.delete-column {
+.product-table th.delete-column,
+.product-table td.delete-column {
     width: 14%;
 }
 
@@ -721,7 +738,8 @@ tr:hover td {
     table-layout: fixed;
 }
 
-.dish-table th, .dish-table td {
+.dish-table th,
+.dish-table td {
     border: 1px solid #ddd;
     padding: 12px;
     text-align: center;
@@ -743,10 +761,10 @@ tr:hover td {
     box-sizing: border-box;
     text-align: right;
     padding: 10px;
-    
+
 }
 
-.div-tablas{
+.div-tablas {
     margin-bottom: 5px;
     padding: 8px;
     background-color: #E7E7E7;
@@ -775,7 +793,7 @@ tr:hover td {
     box-shadow: none;
 }
 
-.totals{
+.totals {
     margin-left: 50%;
 }
 
@@ -792,39 +810,40 @@ tr:hover td {
 
 /* CSS FACTURA */
 
-.custom-width-modal{
+.custom-width-modal {
     max-width: 800px;
     margin: auto;
 }
 
-.company-logo-invoice{
+.company-logo-invoice {
     width: 180px;
     display: block;
     margin: 0 auto;
     margin-bottom: 20px;
 }
 
-.datos-factura{
+.datos-factura {
     display: block;
     margin: 0 auto;
     margin-bottom: 20px;
     text-align: center;
 }
 
-.table-bordered{
+.table-bordered {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
 }
 
-.table-bordered th, .table-bordered td {
+.table-bordered th,
+.table-bordered td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
     width: 33.33%;
 }
 
-.totales_factura{
+.totales_factura {
     margin-left: 68%;
 }
 
@@ -911,18 +930,18 @@ button:hover {
 
 [class*="entypo-"]:before {
     font-family: 'entypo', sans-serif;
-  }
-  
-  [class*="entypo-"] {
+}
+
+[class*="entypo-"] {
     width: 1em;
     height: 1em;
-  }
-  
-  a:hover {
+}
+
+a:hover {
     color: #777;
-  }
-  
-  .movement-title{
+}
+
+.movement-title {
     font-family: 'Raleway', sans-serif;
     letter-spacing: 1.5px;
     color: black;
@@ -932,22 +951,22 @@ button:hover {
     margin: 0;
     border-bottom: 1px solid #777;
     padding-bottom: 0.2em;
-  }
-  
-  h2 {
+}
+
+h2 {
     font-family: 'Raleway', sans-serif;
     letter-spacing: 1.5px;
     color: #999;
     font-weight: 100;
     font-size: 1.0em;
-  }
-  
-  #content {
+}
+
+#content {
     margin-top: 50px;
     text-align: center;
-  }
-  
-  .timeline {
+}
+
+.timeline {
     border-left: 0.25em solid #4298c3;
     background: rgba(255, 255, 255, 0.1);
     margin: 2em auto;
@@ -960,24 +979,24 @@ button:hover {
     margin-right: 3em;
     border-radius: 0.5em;
     min-width: 22em;
-  }
-  
-  .event {
+}
+
+.event {
     min-width: 20em;
     width: 100%;
     vertical-align: middle;
     box-sizing: border-box;
     position: relative;
-  }
-  
-  .timeline .event:before,
-  .timeline .event:after {
+}
+
+.timeline .event:before,
+.timeline .event:after {
     position: absolute;
     display: block;
     top: 1em;
-  }
-  
-  .timeline .event:before {
+}
+
+.timeline .event:before {
     left: -250px;
     color: black;
     content: attr(data-date);
@@ -985,9 +1004,9 @@ button:hover {
     font-weight: 100;
     font-size: 0.9em;
     min-width: 9em;
-  }
-  
-  .timeline .event:after {
+}
+
+.timeline .event:after {
     box-shadow: 0 0 0 0.2em #4298c3;
     left: -3.5em;
     background: white;
@@ -995,39 +1014,39 @@ button:hover {
     height: 0.75em;
     width: 0.75em;
     content: "";
-  }
-  
-  .timeline .event .member-location,
-  .timeline .event .member-parameters {
+}
+
+.timeline .event .member-location,
+.timeline .event .member-parameters {
     display: none;
-  }
-  
-  .timeline .event:last-of-type .member-location,
-  .timeline .event:last-of-type .member-parameters {
+}
+
+.timeline .event:last-of-type .member-location,
+.timeline .event:last-of-type .member-parameters {
     display: block;
-  }
-  
-  .member-infos {
+}
+
+.member-infos {
     padding: 10px;
     text-align: left;
     position: relative;
-  }
-  
-  .member-infos > h1 {
+}
+
+.member-infos>h1 {
     font-weight: bold;
     font-size: 1.4em;
-  }
-  
-  .member-location a:before {
+}
+
+.member-location a:before {
     margin-right: 5px;
-  }
-  
-  .member-location {
+}
+
+.member-location {
     text-indent: 2px;
-  }
-  
-  .follow,
-  .options {
+}
+
+.follow,
+.options {
     width: 30px;
     height: 30px;
     text-align: center;
@@ -1037,50 +1056,103 @@ button:hover {
     box-shadow: 0 2px 0 0 #C0C0C0;
     border-radius: 3px;
     display: inline-block;
-  }
-  
-  .follow:hover,
-  .options:hover {
+}
+
+.follow:hover,
+.options:hover {
     box-shadow: 0 1px 0 0 #C0C0C0;
     box-sizing: border-box;
     vertical-align: bottom;
     margin-bottom: -1px;
-  }
-  
-  .member-socials {
+}
+
+.member-socials {
     display: inline-block;
     font-weight: bold;
     vertical-align: bottom;
     line-height: 8px;
     float: right;
-  }
-  
-  .member-socials li {
+}
+
+.member-socials li {
     display: inline-block;
-  }
-  
-  .shots-number,
-  .followers {
+}
+
+.shots-number,
+.followers {
     font-weight: normal;
     display: block;
     margin-top: 10px;
     font-size: 0.9em;
-  }
-  
-  .member-contact {
+}
+
+.member-contact {
     position: absolute;
     right: 10px;
     top: 10px;
-  }
-  
-  .member-contact li {
+}
+
+.member-contact li {
     display: inline-block;
     margin-left: 10px;
-  }
-  
-  .member-shots-number {
+}
+
+.member-shots-number {
     padding-right: 6px;
     border-right: 1px solid rgba(0, 0, 0, 0.06);
     margin-right: 6px;
     margin-left: 6px;
-  }
+}
+
+.detallemovimineto-form {
+    color: white;
+    width: 100%;
+    border-radius: 10px;
+    background: #3e82d3;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+
+.tipo_activo {
+    padding: 7px;
+    width: 30%;
+    order: 1;
+}
+
+.categoria_activo {
+    padding: 7px;
+    width: 30%;
+    order: 2;
+}
+
+.seleccion_activo {
+    padding: 7px;
+    width: 50%;
+    order: 3;
+}
+
+.dropdown-terminal {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-top: none;
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-terminal .list-group-item {
+    padding: 10px;
+    cursor: pointer;
+    border: none;
+}
+
+.dropdown-terminal .list-group-item:hover {
+    background-color: #f0f0f0;
+}

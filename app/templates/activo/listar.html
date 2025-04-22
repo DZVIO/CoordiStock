@@ -77,10 +77,12 @@
                                                 <td>{{ a.modelo }}</td>
                                             </tr>
                                             <tr>
-                                            <tr>
                                                 <th>N° de serie:</th>
                                                 <td>{{ a.n_serie }}</td>
-                                            </tr> 
+                                            </tr>
+                                            <tr>
+                                                <th>Disponibilidad:</th>
+                                                <td>{{ a.disponibilidad|yesno:"Disponible,No disponible" }}</td>
                                             <tr>
                                                 <th>Estado:</th>
                                                 <td>{{ a.estado | yesno:"Activo,Inactivo" }}</td>

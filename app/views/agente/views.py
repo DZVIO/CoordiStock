@@ -64,6 +64,12 @@ class AgenteCreateView(CreateView):
         return context
     
     def form_valid(self, form):
+        modalidad = form.cleaned_data.get('modalidad')
+        terminal = form.cleaned_data.get('id_terminal')
+
+        if modalidad == Agente.Modalidad.PR and terminal:
+            form.instance.ubicacion = f"{terminal.terminal}-{terminal.nombre}-{terminal.direccion}"
+
         numero_documento = form.cleaned_data.get('numero_documento')
         codigo= form.cleaned_data.get('codigo')
 
@@ -110,6 +116,12 @@ class AgenteUpdateView(UpdateView):
         return context
 
     def form_valid(self, form):
+        modalidad = form.cleaned_data.get('modalidad')
+        terminal = form.cleaned_data.get('id_terminal')
+
+        if modalidad == Agente.Modalidad.PR and terminal:
+            form.instance.ubicacion = f"{terminal.terminal}-{terminal.nombre}-{terminal.direccion}"
+
         nombre = form.cleaned_data.get('nombre').lower()
         response = super().form_valid(form)
         success_url = reverse('app:agente_crear') + '?updated=True'

@@ -7,6 +7,7 @@ from app.views.area.views import *
 from app.views.marca.views import *
 from app.views.agente.views import *
 from app.views.activo.views import *
+from app.views.movimiento.views import *
 from backups.views import BackupDatabaseView, RestoreDatabaseView, DeleteBackupView, BackupListView
 
 app_name = 'app'
@@ -58,4 +59,14 @@ urlpatterns = [
     path('activo/crear/', ActivoCreateView.as_view(), name='activo_crear'),
     path('activo/editar/<int:pk>/', ActivoUpdateView.as_view(), name='activo_editar'),
     path('activo/eliminar/<int:pk>/', ActivoDeleteView.as_view(), name='activo_eliminar'),
+
+    ### CRUD MOVIMIENTO ###
+    path('movimiento/listar/', MovimientoListView.as_view(), name='movimiento_lista'),
+    path('movimiento/crear/', MovimientoCreateView.as_view(), name='movimiento_crear'),
+    path('movimiento/editar/<int:pk>/', MovimientoUpdateView.as_view(), name='movimiento_editar'),
+    path('movimiento/eliminar/<int:pk>/', MovimientoDeleteView.as_view(), name='movimiento_eliminar'),
+
+    ### API'S ###
+    path('movimiento/terminal_api/', TerminalAPI.as_view(), name='terminal_api'),
+    path('movimiento/activo_api/', ActivoAPI.as_view(), name='activo_api'),
 ]
