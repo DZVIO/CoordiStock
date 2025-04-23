@@ -1111,6 +1111,7 @@ h2 {
     background: #3e82d3;
     display: flex;
     flex-wrap: wrap;
+    gap: 10px;
     padding: 10px;
 }
 
@@ -1130,6 +1131,35 @@ h2 {
     padding: 7px;
     width: 50%;
     order: 3;
+}
+.motivo {
+    padding: 7px;
+    width: 50%;
+    order: 4;
+}
+
+.seleccion_agente {
+    padding: 7px;
+    width: 50%;
+    order: 5;
+}
+
+.nomenclatura {
+    padding: 7px;
+    width: 50%;
+    order: 6;
+}
+
+.seleccion_area {
+    padding: 7px;
+    width: 50%;
+    order: 7;
+}
+
+.observaciones {
+    padding: 7px;
+    width: 50%;
+    order: 8;
 }
 
 .dropdown-terminal {

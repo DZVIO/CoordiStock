@@ -501,12 +501,11 @@ class DetalleMovimientoForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["motivo"].widget.attrs["autofocus"] = True
-        self.fields["id_activo"].queryset = Activo.objects.all()
 
     class Meta: 
         model = Detalle_movimiento
         fields = "__all__"
-        whidgets = {
+        widgets = {
             "motivo": TextInput(
                 attrs={
                     'id': 'motivo',
@@ -532,4 +531,3 @@ class DetalleMovimientoForm(ModelForm):
                 }
             )
         }
-        

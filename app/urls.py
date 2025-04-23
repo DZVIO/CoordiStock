@@ -69,4 +69,6 @@ urlpatterns = [
     ### API'S ###
     path('movimiento/terminal_api/', TerminalAPI.as_view(), name='terminal_api'),
     path('movimiento/activo_api/', ActivoAPI.as_view(), name='activo_api'),
+    path('movimiento/agente_api/', AgenteAPI.as_view(), name='agente_api'),
+    path('movimiento/area_api/', AreaAPI.as_view(), name='area_api'),
 ]

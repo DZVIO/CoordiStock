@@ -51,6 +51,32 @@
                                     <input type="hidden" name="id_asset" id="asset-id">
                                     <div id="asset-list" class="list-group dropdown-terminal"></div>
                                 </div>
+                                <div class="motivo form-group position-relative" style="position: relative;">
+                                    <label for="motivo-textarea">Describa el motivo del movimiento:</label><br>
+                                    <textarea id="motivo-textarea" placeholder="Escriba..." rows="4" style="width: 100%; resize: vertical;"></textarea>
+                                </div>
+                                <div class="seleccion_agente form-group position-relative" style="position: relative;">
+                                    <label for="agent-search">Seleccione el agente:</label>
+                                    <input type="text" id="agent-search" class="form-control"
+                                        placeholder="Nombre, codigo, email, area o terminal">
+                                    <input type="hidden" name="id_agent" id="agent-id">
+                                    <div id="agent-list" class="list-group dropdown-terminal"></div>
+                                </div>
+                                <div class="nomenclatura form-group position-relative" style="position: relative;">
+                                    <label for="nomenclature-textarea">Nomenclatura:</label><br>
+                                    <input type="text" id="nomenclature-textarea" class="form-control"placeholder="Escriba..." style="width: 100%; resize: vertical;">
+                                </div>
+                                <div class="seleccion_area form-group position-relative" style="position: relative;">
+                                    <label for="area-search">Seleccione el área:</label>
+                                    <input type="text" id="area-search" class="form-control"
+                                        placeholder="Area">
+                                    <input type="hidden" name="id_area" id="area-id">
+                                    <div id="area-list" class="list-group dropdown-terminal"></div>
+                                </div>
+                                <div class="observaciones form-group position-relative" style="position: relative;">
+                                    <label for="observaciones-textarea">Observaciones:</label><br>
+                                    <textarea id="observaciones-textarea" placeholder="Escriba..." rows="4" style="width: 100%; resize: vertical;"></textarea>
+                                </div>
                             </div>
                         </main>
                     </div>

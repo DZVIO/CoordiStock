@@ -13,8 +13,8 @@ from django.shortcuts import render, redirect
 from django.db.models import ProtectedError
 from rest_framework import generics, filters
 from django.db.models import Q
-from app.models import Movimiento, Activo, Agente, Terminal, Detalle_movimiento
-from .serializers import TerminalSerializer, ActivoSerializer
+from app.models import Movimiento, Activo, Agente, Terminal, Area, Detalle_movimiento
+from .serializers import TerminalSerializer, ActivoSerializer, AgenteSerializer, AreaSerializer
 from app.forms import MovimientoForm, DetalleMovimientoForm
 
 @method_decorator(never_cache, name='dispatch')
@@ -73,6 +73,18 @@ class ActivoAPI(generics.ListAPIView):
             queryset = queryset.filter(categoria=categoria)
 
         return queryset
+    
+class AgenteAPI(generics.ListAPIView):
+    queryset = Agente.objects.filter(estado=True)
+    serializer_class = AgenteSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['nombre', 'codigo', 'email', 'id_area__area', 'id_terminal__terminal']
+
+class AreaAPI(generics.ListAPIView):
+    queryset = Area.objects.filter(estado=True)
+    serializer_class = AreaSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['area']
 
 ###### CREAR ######
 @method_decorator(never_cache, name='dispatch')
