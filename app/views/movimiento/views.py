@@ -118,9 +118,34 @@ class MovimientoCreateView(CreateView):
                     detalle_movimiento = []
             else:
                 detalle_movimiento = []
+            
+            movimiento.save()
+
+            for detalle in detalle_movimiento:
+                try:
+                    id_activo = detalle.get('idactivo')
+                    motivo = detalle.get('motivo')
+                    id_agente = detalle.get('idagente')
+                    nomenclatura = detalle.get('nomenclature')
+                    id_area = detalle.get('idarea')
+                    observaciones = detalle.get('observaciones')    
+
+                    Detalle_movimiento.objects.create(
+                        id_movimiento=movimiento,
+                        id_activo=Activo.objects.get(pk=id_activo),
+                        motivo=motivo,
+                        id_agente=Agente.objects.get(pk=id_agente),
+                        nomenclatura=nomenclatura,
+                        id_area=Area.objects.get(pk=id_area),
+                        observaciones=observaciones
+                    )
+                except Exception as detalle_error:
+                    print(f"Error creando detalle de movimiento: {detalle_error}")
+            
+            return JsonResponse({'success': True, 'message': 'Movimiento creado con éxito.'})
         except Exception as e:
-            print(f"Error al guardar el movimiento: {e}")
-            return JsonResponse({'success': False, 'message': 'Error al generar el movimiento.'})
+            print(f"Error general: {e}")
+            return JsonResponse({'success': False, 'message': f'Error general: {str(e)}'})
 
 ###### EDITAR ######
 

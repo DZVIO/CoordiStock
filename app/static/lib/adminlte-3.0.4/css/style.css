@@ -1071,7 +1071,7 @@ h2 {
     font-weight: bold;
     vertical-align: bottom;
     line-height: 8px;
-    float: right;
+    /* Removed float: right; as it conflicts with display: inline-block */
 }
 
 .member-socials li {

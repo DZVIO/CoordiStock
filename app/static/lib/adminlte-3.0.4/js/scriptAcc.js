@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }) {
         const $searchInput = $(`#${searchInputId}`);
         const $list = $(`#${listContainerId}`);
-    
+
         function fetchItems(query = '') {
             const extraParams = getExtraParams();
             $.ajax({
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 type: 'GET',
                 success: function (data) {
                     $list.empty().show();
-    
+
                     if (data.length === 0) {
                         $list.append('<div class="list-group-item disabled">Sin resultados</div>');
                     } else {
@@ -54,30 +54,30 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         }
-    
+
         $searchInput.on('focus', () => fetchItems());
-    
+
         $searchInput.on('input', function () {
             const query = $(this).val();
             fetchItems(query);
         });
-    
+
         $list.on('click', '.list-group-item', function () {
             const selectedText = $(this).text();
             const selectedId = $(this).data('id');
-    
+
             $searchInput.val(selectedText);
             $(`#${hiddenInputId}`).val(selectedId);
             $list.hide();
         });
-    
+
         $(document).on('click', function (e) {
             if (!$(e.target).closest(`#${searchInputId}, #${listContainerId}`).length) {
                 $list.hide();
             }
         });
     }
-    
+
     // Terminales
     setupSearchComponent({
         searchInputId: 'terminal-search',
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
         apiUrl: '/app/movimiento/terminal_api/',
         formatItem: item => `${item.terminal} - ${item.nombre} - ${item.direccion}`
     });
-    
+
     // Activos
     setupSearchComponent({
         searchInputId: 'asset-search',
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         formatItem: item => `${item.nombre_marca} - ${item.activo} - ${item.modelo} - ${item.n_serie}`
     });
-    
+
     // Agentes
     setupSearchComponent({
         searchInputId: 'agent-search',
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
         apiUrl: '/app/movimiento/agente_api/',
         formatItem: item => `${item.nombre} - ${item.codigo} - ${item.email} - ${item.nombre_area} - ${item.nombre_terminal}`
     });
-    
+
     // Áreas
     setupSearchComponent({
         searchInputId: 'area-search',
@@ -117,5 +117,29 @@ document.addEventListener('DOMContentLoaded', function () {
         hiddenInputId: 'area-id',
         apiUrl: '/app/movimiento/area_api/',
         formatItem: item => `${item.area}`
+    });
+
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const idactivo = document.getElementById('asset-id').value;
+        const idagente = document.getElementById('agent-id').value;
+        const idarea = document.getElementById('area-id').value;
+    
+        if (!idactivo || !idagente || !idarea) {
+            e.preventDefault();
+            Swal.fire('Error', 'Debes seleccionar activo, agente y área.', 'error');
+            return;
+        }
+    
+        const detalle = {
+            idactivo,
+            motivo: document.getElementById('motivo-textarea').value,
+            idagente,
+            nomenclature: document.getElementById('nomenclature-textarea').value,
+            idarea,
+            observaciones: document.getElementById('observaciones-textarea').value
+        };
+    
+        console.log("Enviando detalle:", detalle);
+        document.getElementById('detalle_movimiento').value = JSON.stringify([detalle]);
     });
 });
