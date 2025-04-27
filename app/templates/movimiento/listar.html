@@ -22,31 +22,67 @@
 {% block javascript %}
 <script type="application/javascript">
     $(document).ready(function () {
-        $("#tabla").DataTable({
+        var columnNames = ['id', 'Fecha', 'Tipo de movimiento', 'Terminal'];
+        var excludedColumnIndex = columnNames.indexOf('Opciones');  // Opciones no existe aquí, pero lo dejamos por si quieres agregar luego
+        
+        var table = $("#tabla").DataTable({
             responsive: true,
             initComplete: function () {
                 var api = this.api();
-                var columnNames = ['id', 'Fecha', 'Estado', 'Opciones'];
-                var excludedColumnIndex = columnNames.indexOf('Opciones');
                 api.columns().every(function (index) {
                     var column = this;
                     var header = $(column.header());
+                    
                     if (index !== excludedColumnIndex) {
                         var filterContainer = $('<div class="filter-container"></div>').appendTo(header.empty());
                         $('<label>' + columnNames[index] + '</label>').appendTo(filterContainer);
-                        var select = $('<select><option value="">Todos</option></select>')
-                            .appendTo(filterContainer)
-                            .on('change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
-                                column
-                                    .search(val ? '^' + val + '$' : '', true, false)
-                                    .draw();
+
+                        if (index === 1) {
+                            // FILTRO POR FECHA
+                            $('<label>Fecha inicial:</label>').appendTo(filterContainer);
+                            var startDateInput = $('<input type="date" placeholder="Desde">').appendTo(filterContainer);
+                            
+                            $('<label>Fecha final:</label>').appendTo(filterContainer);
+                            var endDateInput = $('<input type="date" placeholder="Hasta">').appendTo(filterContainer);
+
+                            startDateInput.add(endDateInput).on('change', function () {
+                                var startDate = startDateInput.val();
+                                var endDate = endDateInput.val();
+
+                                var start = startDate ? new Date(startDate + "T00:00:00") : null;
+                                var end = endDate ? new Date(endDate + "T23:59:59") : null;
+
+                                // Limpiar cualquier búsqueda previa
+                                $.fn.dataTable.ext.search = [];
+
+                                // Filtro personalizado
+                                $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+                                    var fechaTexto = data[1]; // Columna Fecha
+                                    var fechaData = new Date(fechaTexto);
+
+                                    if ((start && fechaData < start) || (end && fechaData > end)) {
+                                        return false;
+                                    }
+                                    return true;
+                                });
+
+                                table.draw();
                             });
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d + '</option>');
-                        });
+
+                        } else {
+                            // FILTRO NORMAL (select dropdown)
+                            var select = $('<select><option value="">Todos</option></select>')
+                                .appendTo(filterContainer)
+                                .on('change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                    column
+                                        .search(val ? '^' + val + '$' : '', true, false)
+                                        .draw();
+                                });
+                            column.data().unique().sort().each(function (d, j) {
+                                select.append('<option value="' + d + '">' + d + '</option>');
+                            });
+                        }
                     } else {
                         $('<label>' + columnNames[index] + '</label>').appendTo(header.empty());
                     }

@@ -2,6 +2,7 @@ import json
 from django.contrib import messages
 import django
 from django.contrib.auth.decorators import login_required
+from django.forms import ValidationError
 from django.views.decorators.cache import never_cache
 import os
 from django.urls import reverse_lazy, reverse
@@ -58,7 +59,7 @@ class TerminalAPI(generics.ListAPIView):
 class ActivoAPI(generics.ListAPIView):
     serializer_class = ActivoSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['id_marca__marca', 'activo', 'modelo', 'n_serie']
+    search_fields = ['id_marca__marca', 'activo', 'modelo', 'n_serie', 'renting']
 
     def get_queryset(self):
         queryset = Activo.objects.filter(estado=True, disponibilidad=True)
@@ -75,10 +76,23 @@ class ActivoAPI(generics.ListAPIView):
         return queryset
     
 class AgenteAPI(generics.ListAPIView):
-    queryset = Agente.objects.filter(estado=True)
     serializer_class = AgenteSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['nombre', 'codigo', 'email', 'id_area__area', 'id_terminal__terminal']
+
+    def get_queryset(self):
+        queryset = Agente.objects.filter(estado=True)
+        activo_id = self.request.query_params.get('activo', None)
+
+        if activo_id:
+            try:
+                activo = Activo.objects.get(pk=activo_id)
+                if activo.renting:
+                    queryset = queryset.filter(id_area__area__in=['T.I', 'Call Center'])
+            except Activo.DoesNotExist:
+                pass 
+
+        return queryset
 
 class AreaAPI(generics.ListAPIView):
     queryset = Area.objects.filter(estado=True)
@@ -142,7 +156,8 @@ class MovimientoCreateView(CreateView):
                 except Exception as detalle_error:
                     print(f"Error creando detalle de movimiento: {detalle_error}")
             
-            return JsonResponse({'success': True, 'message': 'Movimiento creado con éxito.'})
+            success_url = reverse_lazy('app:movimiento_lista')
+            return redirect(success_url)
         except Exception as e:
             print(f"Error general: {e}")
             return JsonResponse({'success': False, 'message': f'Error general: {str(e)}'})

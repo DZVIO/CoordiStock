@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     } else {
                         data.forEach(item => {
                             $list.append(
-                                `<button type="button" class="list-group-item list-group-item-action" data-id="${item.id}">
+                                `<button type="button" class="list-group-item list-group-item-action" data-id="${item.id}" data-item-data='${JSON.stringify(item)}'>
                                     ${formatItem(item)}
                                 </button>`
                             );
@@ -65,10 +65,18 @@ document.addEventListener('DOMContentLoaded', function () {
         $list.on('click', '.list-group-item', function () {
             const selectedText = $(this).text();
             const selectedId = $(this).data('id');
-
+        
             $searchInput.val(selectedText);
             $(`#${hiddenInputId}`).val(selectedId);
             $list.hide();
+        
+            const selectedItem = $(this).data('itemData');
+        
+            if (selectedItem && selectedItem.renting === true) {
+                $('#mensaje-renting').show();
+            } else {
+                $('#mensaje-renting').hide();
+            }
         });
 
         $(document).on('click', function (e) {
@@ -107,6 +115,13 @@ document.addEventListener('DOMContentLoaded', function () {
         listContainerId: 'agent-list',
         hiddenInputId: 'agent-id',
         apiUrl: '/app/movimiento/agente_api/',
+        getExtraParams: () => {
+            const activoId = $('#asset-id').val();
+            if (activoId) {
+                return `&activo=${activoId}`;
+            }
+            return '';
+        },
         formatItem: item => `${item.nombre} - ${item.codigo} - ${item.email} - ${item.nombre_area} - ${item.nombre_terminal}`
     });
 
@@ -142,4 +157,62 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("Enviando detalle:", detalle);
         document.getElementById('detalle_movimiento').value = JSON.stringify([detalle]);
     });
+
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const detalle = {
+            idactivo: document.getElementById('asset-id').value,
+            motivo: document.getElementById('motivo-textarea').value,
+            idagente: document.getElementById('agent-id').value,
+            nomenclature: document.getElementById('nomenclature-textarea').value,
+            idarea: document.getElementById('area-id').value,
+            observaciones: document.getElementById('observaciones-textarea').value
+        };
+        
+        console.log("Detalle movimiento enviado:", JSON.stringify([detalle]));
+        document.getElementById('detalle_movimiento').value = JSON.stringify([detalle]);
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const assetTypeSelect = document.getElementById('asset_type');
+    const assetCategorySelect = document.getElementById('asset_category');
+    const nomenclatureField = document.querySelector('.nomenclatura');
+
+    const categorias = {
+        True: ["PC", "Laptop", "Monitor"],
+        False: ["Diadema", "Teclado", "Mouse", "Base refrigerante"]
+    };
+
+    function actualizarCategorias(tipo) {
+        assetCategorySelect.innerHTML = '';
+
+        categorias[tipo].forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            option.textContent = cat;
+            assetCategorySelect.appendChild(option);
+        });
+    }
+
+    function toggleNomenclature() {
+        const tipoActivo = assetTypeSelect.value;
+        const categoriaSeleccionada = assetCategorySelect.value;
+
+        if (tipoActivo === "False" || categoriaSeleccionada === "Monitor") {
+            nomenclatureField.style.display = 'none';
+            document.getElementById('nomenclature-textarea').value = '';
+        } else {
+            nomenclatureField.style.display = 'block';
+        }
+    }
+
+    assetTypeSelect.addEventListener('change', function () {
+        actualizarCategorias(this.value);
+        toggleNomenclature();
+    });
+
+    assetCategorySelect.addEventListener('change', toggleNomenclature);
+
+    toggleNomenclature();
+    actualizarCategorias(assetTypeSelect.value);
 });

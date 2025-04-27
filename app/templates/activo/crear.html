@@ -65,18 +65,24 @@
 
         function actualizarCategorias() {
             if (!tipoField || !categoriaField) return;
-
+        
             const tipoSeleccionado = tipoField.value;
             const categorias = categoriasPorTipo[tipoSeleccionado] || [];
-
+        
+            const categoriaActual = categoriaField.value;
+        
             categoriaField.innerHTML = "";
+        
             categorias.forEach(cat => {
                 const option = document.createElement("option");
                 option.value = cat;
                 option.textContent = cat;
+                if (cat === categoriaActual) {
+                    option.selected = true;
+                }
                 categoriaField.appendChild(option);
             });
-
+        
             toggleFields();
         }
 

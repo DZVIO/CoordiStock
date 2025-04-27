@@ -74,6 +74,7 @@ class Agente(models.Model):
         
     nombre = models.CharField(max_length=50, verbose_name="Nombre")
     codigo = models.PositiveIntegerField(verbose_name="Código", unique=True)
+    cargo = models.CharField(max_length=50, verbose_name="Cargo")
     tipo_documento = models.CharField(max_length=3, choices=TipoDocumento.choices, default=TipoDocumento.CC, verbose_name="Tipo de documento")
     numero_documento = models.PositiveIntegerField(verbose_name="Número de documento", unique=True)
     email = models.EmailField(max_length=50, verbose_name="Email", validators=[validate_email])
@@ -121,15 +122,6 @@ class Activo(models.Model):
         if self.categoria == self.categorias.MONITOR and self.renting:
             raise ValidationError({'renting': 'Las pantallas no pueden ser de renting.'})
 
-        # if self.categoria == self.categorias.MONITOR and self.nomenclatura:
-        #     raise ValidationError({'nomenclatura': 'Las pantallas no requieren una nomenclatura.'})
-
-        # if self.renting and self.id_area.area.lower() not in ["call center", "t.i"]:
-        #     raise ValidationError({'id_area': 'Los equipos en renting solo pueden asignarse a las áreas de Call Center o T.I.'})
-
-        # if self.categoria in [self.categorias.PC, self.categorias.LAPTOP] and not self.nomenclatura:
-        #     raise ValidationError({'nomenclatura': 'Las laptops y PCs requieren una nomenclatura obligatoria.'})
-
         perifericos = [
             self.categorias.DIADEMA, 
             self.categorias.TECLADO, 
@@ -143,9 +135,6 @@ class Activo(models.Model):
                 raise ValidationError({'activo': 'Si el equipo es de renting, el activo debe tener 8 dígitos.'})
             elif not self.renting and len(activo_str) != 5:
                 raise ValidationError({'activo': 'Si el equipo NO es de renting, el activo debe tener 5 dígitos.'})
-
-        # if self.renting and self.id_agente.id_area.area.lower() not in ["call center", "t.i"]:
-        #     raise ValidationError({'id_agente': 'Un equipo en renting solo puede asignarse a un agente de Call Center o T.I.'})
 
     class Meta:
         verbose_name= "activo"

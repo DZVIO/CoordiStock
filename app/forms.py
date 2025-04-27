@@ -141,6 +141,15 @@ class AgenteForm(ModelForm):
                     'name': "codigo",
                 }
             ),
+            "cargo": TextInput(
+                attrs={
+                    'id': 'cargo',
+                    "placeholder": "Cargo del agente",
+                    'class': 'form-control',
+                    'name': "cargo",
+                }
+            ),
+            
             "tipo_documento": Select(
                 attrs={
                     'id': 'tipo_documento',

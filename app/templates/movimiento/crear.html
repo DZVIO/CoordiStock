@@ -21,7 +21,7 @@
                     <div class="details-section">
                         <main id="product-sale">
                             <div class="form-group">
-                                <label for="{{ form.tipo_mov.id_for_label }}">{{ form.tipo_mov.label }}:</label>
+                                <label for="{{ form.tipo_mov.id_for_label }} ">{{ form.tipo_mov.label }}:</label>
                                 {{ form.tipo_mov|add_class:'form-control'|attr:'autocomplete:off' }}
                             </div>
                             <div class="detallemovimineto-form">
@@ -50,6 +50,9 @@
                                         placeholder="Marca, activo, modelo o serial">
                                     <input type="hidden" name="id_asset" id="asset-id">
                                     <div id="asset-list" class="list-group dropdown-terminal"></div>
+                                    <div id="mensaje-renting" class="alert alert-warning mt-2" style="display: none;">
+                                        Los activos que son de renting solo pueden realizar movimientos con agentes que pertenezcan a las áreas de T.I y Call Center ⚠️
+                                    </div>
                                 </div>
                                 <div class="motivo form-group position-relative" style="position: relative;">
                                     <label for="motivo-textarea">Describa el motivo del movimiento:</label><br>
@@ -132,46 +135,5 @@
     mostrarFechaHora();
 
     setInterval(mostrarFechaHora, 1000);
-</script>
-<script>
-    const assetTypeSelect = document.getElementById('asset_type');
-    const assetCategorySelect = document.getElementById('asset_category');
-
-    const categorias = {
-        True: ["PC", "Laptop", "Monitor"],
-        False: ["Diadema", "Teclado", "Mouse", "Base refrigerante"]
-    };
-
-    function actualizarCategorias(tipo) {
-        assetCategorySelect.innerHTML = '';
-
-        categorias[tipo].forEach(cat => {
-            const option = document.createElement('option');
-            option.value = cat;
-            option.textContent = cat;
-            assetCategorySelect.appendChild(option);
-        });
-    }
-
-    assetTypeSelect.addEventListener('change', function () {
-        actualizarCategorias(this.value);
-    });
-
-    actualizarCategorias(assetTypeSelect.value);
-</script>
-<script>
-    document.querySelector('form').addEventListener('submit', function (e) {
-        const detalle = {
-            idactivo: document.getElementById('asset-id').value,
-            motivo: document.getElementById('motivo-textarea').value,
-            idagente: document.getElementById('agent-id').value,
-            nomenclature: document.getElementById('nomenclature-textarea').value,
-            idarea: document.getElementById('area-id').value,
-            observaciones: document.getElementById('observaciones-textarea').value
-        };
-        
-        console.log("Detalle movimiento enviado:", JSON.stringify([detalle]));
-        document.getElementById('detalle_movimiento').value = JSON.stringify([detalle]);
-    });
 </script>
 {% endblock %}
