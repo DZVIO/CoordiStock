@@ -218,7 +218,7 @@ class ActivoForm(ModelForm):
     class Meta:
         model = Activo
         fields = "__all__"
-        exclude = ["fecha_reg"]
+        exclude = ["fecha_reg", "mantenimiento"]
         widgets = {
             'tipo': Select(
                 choices=[(True, "Activo"), (False, "Periferico")],

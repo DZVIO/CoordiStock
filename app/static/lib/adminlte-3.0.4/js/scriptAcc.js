@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const categoria = $('#asset_category').val();
             return `&tipo=${tipo}&categoria=${categoria}`;
         },
-        formatItem: item => `${item.nombre_marca} - ${item.activo} - ${item.modelo} - ${item.n_serie}`
+        formatItem: item => `${item.disponibilidad ? 'Disponible' : 'No disponible'}: ${item.nombre_marca} - ${item.activo} - ${item.modelo} - ${item.n_serie}`
     });
 
     // Agentes

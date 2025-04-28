@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.core.validators import MinLengthValidator
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 ####################################################################################################
 
@@ -114,6 +116,7 @@ class Activo(models.Model):
     modelo = models.CharField(max_length=50, verbose_name="Modelo")
     n_serie = models.CharField(max_length=50, verbose_name="N. de serie", unique=True)
     disponibilidad = models.BooleanField(default=True, verbose_name="Disponibilidad")
+    mantenimiento = models.BooleanField(default=False, verbose_name="Mantenimiento")
     estado = models.BooleanField(default=True, verbose_name="Estado")
 
     def __str__(self):
@@ -236,11 +239,15 @@ class Movimiento(models.Model):
         MANTENIMIENTO = 'Mantenimiento', 'Mantenimiento'
         PRESTAMO = 'Préstamo', 'Préstamo'
         TRASLADO = 'Traslado', 'Traslado'
+        DEVOLUCION = 'Devolución', 'Devolución'
         D_FINAL = 'Disposición final', 'Disposición final'
 
     fecha_mov = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de movimiento")
     tipo_mov = models.CharField(max_length=50, choices=t_m.choices, default=t_m.PRESTAMO, verbose_name="Tipo de movimiento")
     id_terminal = models.ForeignKey(Terminal, on_delete=models.PROTECT, verbose_name="Terminal")
+    responsable_content_type = models.ForeignKey(ContentType, on_delete=models.SET_NULL, null=True, blank=True)
+    responsable_object_id = models.PositiveIntegerField(null=True, blank=True)
+    responsable = GenericForeignKey('responsable_content_type', 'responsable_object_id')
 
     def __str__(self):
         return f"{self.fecha_mov}"

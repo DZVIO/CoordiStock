@@ -1,5 +1,6 @@
 import json
 from django.contrib import messages
+from django.contrib.contenttypes.models import ContentType
 import django
 from django.contrib.auth.decorators import login_required
 from django.forms import ValidationError
@@ -14,7 +15,7 @@ from django.shortcuts import render, redirect
 from django.db.models import ProtectedError
 from rest_framework import generics, filters
 from django.db.models import Q
-from app.models import Movimiento, Activo, Agente, Terminal, Area, Detalle_movimiento
+from app.models import Movimiento, Activo, Agente, Terminal, Area, Detalle_movimiento, Operador
 from .serializers import TerminalSerializer, ActivoSerializer, AgenteSerializer, AreaSerializer
 from app.forms import MovimientoForm, DetalleMovimientoForm
 
@@ -59,10 +60,10 @@ class TerminalAPI(generics.ListAPIView):
 class ActivoAPI(generics.ListAPIView):
     serializer_class = ActivoSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['id_marca__marca', 'activo', 'modelo', 'n_serie', 'renting']
+    search_fields = ['id_marca__marca', 'activo', 'modelo', 'n_serie', 'renting', 'disonibilidad']
 
     def get_queryset(self):
-        queryset = Activo.objects.filter(estado=True, disponibilidad=True)
+        queryset = Activo.objects.filter(estado=True)
 
         tipo = self.request.GET.get('tipo')
         categoria = self.request.GET.get('categoria')
@@ -123,6 +124,16 @@ class MovimientoCreateView(CreateView):
     def form_valid(self, form):
         try:
             movimiento = form.save(commit=False)
+            user = self.request.user
+
+            try:
+                operador = Operador.objects.get(user=user)
+                movimiento.responsable_content_type = ContentType.objects.get_for_model(Operador)
+                movimiento.responsable_object_id = operador.id
+            except Operador.DoesNotExist:
+                movimiento.responsable_content_type = ContentType.objects.get_for_model(user)
+                movimiento.responsable_object_id = user.id
+
             detalle_movimiento_json = self.request.POST.get('detalle_movimiento')
 
             if detalle_movimiento_json:
@@ -132,7 +143,7 @@ class MovimientoCreateView(CreateView):
                     detalle_movimiento = []
             else:
                 detalle_movimiento = []
-            
+
             movimiento.save()
 
             for detalle in detalle_movimiento:
@@ -142,22 +153,42 @@ class MovimientoCreateView(CreateView):
                     id_agente = detalle.get('idagente')
                     nomenclatura = detalle.get('nomenclature')
                     id_area = detalle.get('idarea')
-                    observaciones = detalle.get('observaciones')    
+                    observaciones = detalle.get('observaciones')
+
+                    activo = Activo.objects.get(pk=id_activo)
+
+                    if movimiento.tipo_mov == Movimiento.t_m.ASIGNACION:
+                        activo.disponibilidad = False
+                        activo.save()
+
+                    if movimiento.tipo_mov == Movimiento.t_m.PRESTAMO:
+                        activo.disponibilidad = False
+                        activo.save()
+
+                    if movimiento.tipo_mov == Movimiento.t_m.DEVOLUCION:
+                        activo.disponibilidad = True
+                        activo.save()
+
+                    if movimiento.tipo_mov == Movimiento.t_m.D_FINAL:
+                        activo.estado = False
+                        activo.save()
 
                     Detalle_movimiento.objects.create(
                         id_movimiento=movimiento,
-                        id_activo=Activo.objects.get(pk=id_activo),
+                        id_activo=activo,
                         motivo=motivo,
                         id_agente=Agente.objects.get(pk=id_agente),
                         nomenclatura=nomenclatura,
                         id_area=Area.objects.get(pk=id_area),
                         observaciones=observaciones
                     )
+
                 except Exception as detalle_error:
                     print(f"Error creando detalle de movimiento: {detalle_error}")
-            
+
             success_url = reverse_lazy('app:movimiento_lista')
             return redirect(success_url)
+
         except Exception as e:
             print(f"Error general: {e}")
             return JsonResponse({'success': False, 'message': f'Error general: {str(e)}'})

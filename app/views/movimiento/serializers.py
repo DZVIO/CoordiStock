@@ -10,7 +10,7 @@ class ActivoSerializer(serializers.ModelSerializer):
     nombre_marca = serializers.CharField(source='id_marca.marca')
     class Meta:
         model = Activo
-        fields = ['id','nombre_marca', 'activo', 'modelo', 'n_serie', 'renting']
+        fields = ['id','nombre_marca', 'activo', 'modelo', 'n_serie', 'renting', 'disponibilidad']
     
 class AgenteSerializer(serializers.ModelSerializer):
     nombre_area = serializers.CharField(source='id_area.area')
