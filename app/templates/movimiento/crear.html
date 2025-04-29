@@ -2,7 +2,7 @@
 {% load widget_tweaks %}
 {% block contenido %}
 {% load static %}
-<form method="post" action=".">
+<form method="post" action="." id="form-movimiento" ">
     {% csrf_token %}
     <div class="card card-default">
         <div class="card-header">
@@ -23,6 +23,21 @@
                             <div class="form-group">
                                 <label for="{{ form.tipo_mov.id_for_label }} ">{{ form.tipo_mov.label }}:</label>
                                 {{ form.tipo_mov|add_class:'form-control'|attr:'autocomplete:off' }}
+                                <div class="tipo_mantenimiento form-group position-relative" id="tipo-mantenimiento-opciones" style="display: none; margin-top: 15px;">
+                                    <label>Estado del mantenimiento:</label><br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="tipo_mantenimiento" id="recepcion" value="Recepción">
+                                        <label class="form-check-label" for="recepcion">
+                                            Recepción
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="tipo_mantenimiento" id="entrega" value="Entrega">
+                                        <label class="form-check-label" for="entrega">
+                                            Entrega
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                             <div class="detallemovimineto-form">
                                 <div class="tipo_activo">
@@ -64,6 +79,9 @@
                                         placeholder="Nombre, codigo, email, area o terminal">
                                     <input type="hidden" name="id_agent" id="agent-id">
                                     <div id="agent-list" class="list-group dropdown-terminal"></div>
+                                    <div id="mensaje-agente" class="alert alert-secondary" style="display: none;">
+                                        <!-- Mensaje según el movimiento -->
+                                    </div>
                                 </div>
                                 <div class="nomenclatura form-group position-relative" style="position: relative;">
                                     <label for="nomenclature-textarea">Nomenclatura:</label><br>

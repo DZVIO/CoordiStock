@@ -1,26 +1,24 @@
-// MOVIMIENTO DE ACTIVOS //
 document.addEventListener('DOMContentLoaded', function () {
+
+    // --- MOVIMIENTO DE ACTIVOS: Mostrar/Ocultar detalles ---
     $('.movement-title').click(function () {
         console.log("Clicked");
         $(this).closest('.member-infos').find('.activoinfo').slideToggle(600);
     });
 
     $('.activoinfo').each(function () {
-        let categoria = $(this).find('tr:has(th:contains("Categoria")) td').text().trim().toLowerCase();
+        const categoria = $(this).find('tr:has(th:contains("Categoria")) td').text().trim().toLowerCase();
+        const tipo = $(this).find('tr:has(th:contains("Tipo")) td').text().trim().toLowerCase();
 
         if (categoria === "monitor") {
             $(this).find('tr:has(th:contains("Renting")), tr:has(th:contains("Nomenclatura"))').hide();
         }
-    });
-
-    $('.activoinfo').each(function () {
-        let tipo = $(this).find('tr:has(th:contains("Tipo")) td').text().trim().toLowerCase();
-
         if (tipo === "periferico") {
             $(this).find('tr:has(th:contains("Renting")), tr:has(th:contains("Activo"))').hide();
         }
     });
 
+    // --- COMPONENTE DE BÚSQUEDA GENÉRICO ---
     function setupSearchComponent({
         searchInputId,
         listContainerId,
@@ -44,11 +42,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         $list.append('<div class="list-group-item disabled">Sin resultados</div>');
                     } else {
                         data.forEach(item => {
-                            $list.append(
-                                `<button type="button" class="list-group-item list-group-item-action" data-id="${item.id}" data-item-data='${JSON.stringify(item)}'>
+                            $list.append(`
+                                <button type="button" class="list-group-item list-group-item-action" data-id="${item.id}" data-item-data='${JSON.stringify(item)}'>
                                     ${formatItem(item)}
-                                </button>`
-                            );
+                                </button>`);
                         });
                     }
                 }
@@ -56,22 +53,19 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         $searchInput.on('focus', () => fetchItems());
-
         $searchInput.on('input', function () {
-            const query = $(this).val();
-            fetchItems(query);
+            fetchItems($(this).val());
         });
 
         $list.on('click', '.list-group-item', function () {
             const selectedText = $(this).text();
             const selectedId = $(this).data('id');
-        
+            const selectedItem = $(this).data('itemData');
+
             $searchInput.val(selectedText);
             $(`#${hiddenInputId}`).val(selectedId);
             $list.hide();
-        
-            const selectedItem = $(this).data('itemData');
-        
+
             if (selectedItem && selectedItem.renting === true) {
                 $('#mensaje-renting').show();
             } else {
@@ -86,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Terminales
+    // --- CONFIGURACIÓN DE BUSCADORES ---
     setupSearchComponent({
         searchInputId: 'terminal-search',
         listContainerId: 'terminal-list',
@@ -95,7 +89,6 @@ document.addEventListener('DOMContentLoaded', function () {
         formatItem: item => `${item.terminal} - ${item.nombre} - ${item.direccion}`
     });
 
-    // Activos
     setupSearchComponent({
         searchInputId: 'asset-search',
         listContainerId: 'asset-list',
@@ -104,12 +97,12 @@ document.addEventListener('DOMContentLoaded', function () {
         getExtraParams: () => {
             const tipo = $('#asset_type').val();
             const categoria = $('#asset_category').val();
-            return `&tipo=${tipo}&categoria=${categoria}`;
+            const tipoMov = $('#tipo_mov').val();
+            return `&tipo=${tipo}&categoria=${categoria}&tipo_mov=${tipoMov}`;
         },
         formatItem: item => `${item.disponibilidad ? 'Disponible' : 'No disponible'}: ${item.nombre_marca} - ${item.activo} - ${item.modelo} - ${item.n_serie}`
     });
 
-    // Agentes
     setupSearchComponent({
         searchInputId: 'agent-search',
         listContainerId: 'agent-list',
@@ -117,15 +110,11 @@ document.addEventListener('DOMContentLoaded', function () {
         apiUrl: '/app/movimiento/agente_api/',
         getExtraParams: () => {
             const activoId = $('#asset-id').val();
-            if (activoId) {
-                return `&activo=${activoId}`;
-            }
-            return '';
+            return activoId ? `&activo=${activoId}` : '';
         },
         formatItem: item => `${item.nombre} - ${item.codigo} - ${item.email} - ${item.nombre_area} - ${item.nombre_terminal}`
     });
 
-    // Áreas
     setupSearchComponent({
         searchInputId: 'area-search',
         listContainerId: 'area-list',
@@ -134,17 +123,18 @@ document.addEventListener('DOMContentLoaded', function () {
         formatItem: item => `${item.area}`
     });
 
+    // --- ENVÍO DE FORMULARIO: validación y serialización ---
     document.querySelector('form').addEventListener('submit', function (e) {
         const idactivo = document.getElementById('asset-id').value;
         const idagente = document.getElementById('agent-id').value;
         const idarea = document.getElementById('area-id').value;
-    
+
         if (!idactivo || !idagente || !idarea) {
             e.preventDefault();
             Swal.fire('Error', 'Debes seleccionar activo, agente y área.', 'error');
             return;
         }
-    
+
         const detalle = {
             idactivo,
             motivo: document.getElementById('motivo-textarea').value,
@@ -153,27 +143,12 @@ document.addEventListener('DOMContentLoaded', function () {
             idarea,
             observaciones: document.getElementById('observaciones-textarea').value
         };
-    
+
         console.log("Enviando detalle:", detalle);
         document.getElementById('detalle_movimiento').value = JSON.stringify([detalle]);
     });
 
-    document.querySelector('form').addEventListener('submit', function (e) {
-        const detalle = {
-            idactivo: document.getElementById('asset-id').value,
-            motivo: document.getElementById('motivo-textarea').value,
-            idagente: document.getElementById('agent-id').value,
-            nomenclature: document.getElementById('nomenclature-textarea').value,
-            idarea: document.getElementById('area-id').value,
-            observaciones: document.getElementById('observaciones-textarea').value
-        };
-        
-        console.log("Detalle movimiento enviado:", JSON.stringify([detalle]));
-        document.getElementById('detalle_movimiento').value = JSON.stringify([detalle]);
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function () {
+    // --- ACTUALIZAR CATEGORÍAS Y MOSTRAR NOMENCLATURA ---
     const assetTypeSelect = document.getElementById('asset_type');
     const assetCategorySelect = document.getElementById('asset_category');
     const nomenclatureField = document.querySelector('.nomenclatura');
@@ -185,7 +160,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function actualizarCategorias(tipo) {
         assetCategorySelect.innerHTML = '';
-
         categorias[tipo].forEach(cat => {
             const option = document.createElement('option');
             option.value = cat;
@@ -213,6 +187,59 @@ document.addEventListener('DOMContentLoaded', function () {
 
     assetCategorySelect.addEventListener('change', toggleNomenclature);
 
-    toggleNomenclature();
     actualizarCategorias(assetTypeSelect.value);
+    toggleNomenclature();
+
+    // --- MENSAJE SEGÚN TIPO DE MOVIMIENTO ---
+    const tipoMovSelect = document.getElementById('tipo_mov');
+    const mensajeAgente = document.getElementById('mensaje-agente');
+    const mantenimientoOpciones = document.getElementById('tipo-mantenimiento-opciones');
+
+    const mensajesPorMovimiento = {
+        "Asignación": "Seleccione el agente al cual va a asignar el activo",
+        "Préstamo": "Seleccione el agente al cual va a prestar el activo",
+        "Traslado": "Seleccione el agente al que va destinado el traslado del activo",
+        "Devolución": "Seleccione el agente que recibe el equipo",
+        "Disposición final": "Seleccione el agente que va a realizar la disposición final del activo",
+        "Mantenimiento": "Seleccione el agente responsable del mantenimiento"
+    };
+
+    tipoMovSelect.addEventListener('change', function () {
+        const movimientoSeleccionado = tipoMovSelect.options[tipoMovSelect.selectedIndex].text.trim();
+        const mensaje = mensajesPorMovimiento[movimientoSeleccionado];
+
+        if (mensaje) {
+            mensajeAgente.textContent = mensaje;
+            mensajeAgente.style.display = 'block';
+        } else {
+            mensajeAgente.style.display = 'none';
+        }
+
+        if (movimientoSeleccionado === "Mantenimiento") {
+            mantenimientoOpciones.style.display = 'block';
+        } else {
+            mantenimientoOpciones.style.display = 'none';
+            document.querySelectorAll('input[name="tipo_mantenimiento"]').forEach(radio => radio.checked = false);
+        }
+    });
+
+    const form = document.getElementById('form-movimiento');
+
+    form.addEventListener('submit', function (event) {
+        const movimientoSeleccionado = tipoMovSelect.options[tipoMovSelect.selectedIndex].text.trim();
+
+        if (movimientoSeleccionado === "Mantenimiento") {
+            const tipoMantenimientoSeleccionado = document.querySelector('input[name="tipo_mantenimiento"]:checked');
+            
+            if (!tipoMantenimientoSeleccionado) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    text: 'Debes seleccionar el estado del mantenimiento',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        }
+    });
 });

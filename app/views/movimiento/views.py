@@ -59,14 +59,15 @@ class TerminalAPI(generics.ListAPIView):
 
 class ActivoAPI(generics.ListAPIView):
     serializer_class = ActivoSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['id_marca__marca', 'activo', 'modelo', 'n_serie', 'renting', 'disonibilidad']
+    filter_backends = []
+    search_fields = ['id_marca__marca', 'activo', 'modelo', 'n_serie', 'renting', 'disponibilidad']
 
     def get_queryset(self):
         queryset = Activo.objects.filter(estado=True)
 
         tipo = self.request.GET.get('tipo')
         categoria = self.request.GET.get('categoria')
+        tipo_mov = self.request.GET.get('tipo_mov') 
 
         if tipo in ['True', 'False']:
             queryset = queryset.filter(tipo=(tipo == 'True'))
@@ -74,6 +75,26 @@ class ActivoAPI(generics.ListAPIView):
         if categoria:
             queryset = queryset.filter(categoria=categoria)
 
+        if tipo_mov in ['Asignación', 'Préstamo', 'Disposición final']: 
+            queryset = queryset.filter(disponibilidad=True, mantenimiento=False)
+
+        elif tipo_mov == 'Devolución':
+            queryset = queryset.filter(disponibilidad=False)
+
+        return queryset
+
+    def filter_queryset(self, queryset):
+        queryset = super().filter_queryset(queryset)
+
+        search_query = self.request.GET.get('search')
+        if search_query:
+            from django.db.models import Q
+            queryset = queryset.filter(
+                Q(id_marca__marca__icontains=search_query) |
+                Q(activo__icontains=search_query) |
+                Q(modelo__icontains=search_query) |
+                Q(n_serie__icontains=search_query)
+            )
         return queryset
     
 class AgenteAPI(generics.ListAPIView):
@@ -135,6 +156,7 @@ class MovimientoCreateView(CreateView):
                 movimiento.responsable_object_id = user.id
 
             detalle_movimiento_json = self.request.POST.get('detalle_movimiento')
+            tipo_mantenimiento = self.request.POST.get('tipo_mantenimiento')
 
             if detalle_movimiento_json:
                 try:
@@ -173,6 +195,13 @@ class MovimientoCreateView(CreateView):
                         activo.estado = False
                         activo.save()
 
+                    if movimiento.tipo_mov == Movimiento.t_m.MANTENIMIENTO:
+                        if tipo_mantenimiento == 'Recepción':
+                            activo.mantenimiento = True
+                        elif tipo_mantenimiento == 'Entrega':
+                            activo.mantenimiento = False
+                        activo.save()
+
                     Detalle_movimiento.objects.create(
                         id_movimiento=movimiento,
                         id_activo=activo,
@@ -192,7 +221,6 @@ class MovimientoCreateView(CreateView):
         except Exception as e:
             print(f"Error general: {e}")
             return JsonResponse({'success': False, 'message': f'Error general: {str(e)}'})
-
 ###### EDITAR ######
 
 @method_decorator(never_cache, name='dispatch')
