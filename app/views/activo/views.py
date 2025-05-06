@@ -10,7 +10,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.utils.decorators import method_decorator
 from django.shortcuts import render, redirect
 from django.db.models import ProtectedError
-from app.models import Activo
+from app.models import Activo, Movimiento, Detalle_movimiento
 from app.forms import ActivoForm
 
 @method_decorator(never_cache, name='dispatch')
@@ -42,6 +42,7 @@ class ActivoListView(ListView):
         context['entidad'] = 'Listado de activos'
         context['listar_url'] = reverse_lazy('app:activo_lista')
         context['crear_url'] = reverse_lazy('app:activo_crear')
+        context['detalles_movimiento'] = Detalle_movimiento.objects.select_related('id_movimiento', 'id_activo', 'id_area', 'id_agente').all()
         return context
 
 ###### CREAR ######

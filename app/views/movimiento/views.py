@@ -43,11 +43,18 @@ class MovimientoListView(ListView):
         return JsonResponse(nombre)
 
     def get_context_data(self, **kwargs):
+        movimientos = Movimiento.objects.all()
         context = super().get_context_data(**kwargs)
         context['titulo'] = 'Listado de movimientos'
         context['entidad'] = 'Listado de movimientos'
         context['listar_url'] = reverse_lazy('app:movimiento_lista')
         context['crear_url'] = reverse_lazy('app:movimiento_crear')
+        context['movimientos_con_detalles'] = [
+            {'movimiento': movimiento, 
+            'detalle_movimiento': Detalle_movimiento.objects.filter(id_movimiento=movimiento)
+            }
+            for movimiento in movimientos
+        ]
         return context
 
 ###### API'S ######

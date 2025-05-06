@@ -41,7 +41,7 @@
         text: 'Ya existe una terminal con este nombre.',
         icon: 'error',
         confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#04644b'
+        confirmButtonColor: '#4D90FE'
     });
     {% elif request.GET.created %}
     Swal.fire({
@@ -49,7 +49,7 @@
         text: 'Terminal registrada con éxito.',
         icon: 'success',
         confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#04644b'
+        confirmButtonColor: '#4D90FE'
     }).then((result) => {
         if (result.isConfirmed) {
             window.location.href = "{% url 'app:terminal_lista' %}";
@@ -61,7 +61,7 @@
         text: 'Terminal editada con éxito.',
         icon: 'success',
         confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#04644b'
+        confirmButtonColor: '#4D90FE'
     }).then((result) => {
         if (result.isConfirmed) {
             window.location.href = "{% url 'app:terminal_lista' %}";

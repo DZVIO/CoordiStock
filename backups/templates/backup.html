@@ -98,7 +98,7 @@
                     icon: 'info',
                     showCancelButton: true,
                     confirmButtonText: 'Sí, restaurar',
-                    confirmButtonColor: '#04644b',
+                    confirmButtonColor: '#4D90FE',
                     cancelButtonText: 'Cancelar',
                     cancelButtonColor: '#d33'
                 }).then((result) => {
@@ -119,7 +119,7 @@
                                         text: data.messages.join(' '),
                                         icon: 'success',
                                         confirmButtonText: 'Aceptar',
-                                        confirmButtonColor: '#04644b',
+                                        confirmButtonColor: '#4D90FE',
                                     });
                                 } else {
                                     Swal.fire({
@@ -127,7 +127,7 @@
                                         text: data.messages.join(' '),
                                         icon: 'error',
                                         confirmButtonText: 'Aceptar',
-                                        confirmButtonColor: '#04644b',
+                                        confirmButtonColor: '#4D90FE',
                                     });
                                 }
                             })
@@ -150,7 +150,7 @@
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Sí, eliminar',
-                    confirmButtonColor: '#04644b',
+                    confirmButtonColor: '#4D90FE',
                     cancelButtonText: 'Cancelar',
                     cancelButtonColor: '#d33'
                 }).then((result) => {
@@ -170,7 +170,7 @@
                                     text: data.messages.join(' '),
                                     icon: data.success ? 'success' : 'error',
                                     confirmButtonText: 'Aceptar',
-                                    confirmButtonColor: '#04644b',
+                                    confirmButtonColor: '#4D90FE',
                                 });
 
                                 if (data.success) {
@@ -210,7 +210,7 @@
                         text: message,
                         icon: data.success ? 'success' : 'error',
                         confirmButtonText: 'Aceptar',
-                        confirmButtonColor: '#04644b'
+                        confirmButtonColor: '#4D90FE'
                     });
                     loadBackupFiles();
                 })
@@ -221,7 +221,7 @@
                         text: 'Error al crear el respaldo.',
                         icon: 'error',
                         confirmButtonText: 'Aceptar',
-                        confirmButtonColor: '#04644b'
+                        confirmButtonColor: '#4D90FE'
                     });
                 });
         });

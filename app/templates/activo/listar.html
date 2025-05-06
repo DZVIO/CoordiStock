@@ -2,17 +2,17 @@
 {% load static %}
 
 {% block columnas %}
-    <tr>
-        <!-- <th scope="col">Agente</th> -->
-        <th scope="col">id</th>
-        <th scope="col">Tipo</th>
-        <th scope="col">Activo fijo</th>
-        <th scope="col">Marca</a></th>
-        <th scope="col">Categoria</th>
-        <th scope="col">Estado</th>
-        <!-- <th scope="col">Opciones</th> -->
-        <th scope="col">Linea de tiempo</th>
-    </tr>
+<tr>
+    <!-- <th scope="col">Agente</th> -->
+    <th scope="col">id</th>
+    <th scope="col">Tipo</th>
+    <th scope="col">Activo fijo</th>
+    <th scope="col">Marca</a></th>
+    <th scope="col">Categoria</th>
+    <th scope="col">Estado</th>
+    <!-- <th scope="col">Opciones</th> -->
+    <th scope="col">Linea de tiempo</th>
+</tr>
 
 {% endblock %}
 
@@ -20,7 +20,7 @@
 {% for a in object_list %}
 <tr>
     <!-- <td>{{ a.id_agente }}</td> -->
-    <td>{{ a.id }}</td> 
+    <td>{{ a.id }}</td>
     <td>{{ a.tipo | yesno:"Activo,Periférico"}}</td>
     <td>{{ a.activo }}</td>
     <td>{{ a.id_marca }}</td>
@@ -86,14 +86,48 @@
                                             <tr>
                                                 <th>Estado:</th>
                                                 <td>{{ a.estado | yesno:"Activo,Inactivo" }}</td>
-                                            </tr> 
+                                            </tr>
                                         </table>
                                     </div>
                                 </div>
                             </li>
-                            <li class="event" data-date="fecha movimiento">
-                                <!-- MOVIMIENTO y DETALLE-->
+                            {% for detalle in detalles_movimiento %}
+                            {% if detalle.id_activo.id == a.id %}
+                            <li class="event" data-date="{{ detalle.id_movimiento.fecha_mov }}">
+                                <div class="member-infos">
+                                    <h1 class='movement-title'>{{ detalle.id_movimiento.get_tipo_mov_display }}</h1>
+                                    <div class="activoinfo">
+                                        <table>
+                                            <tr>
+                                                <th>Fecha de movimiento:</th>
+                                                <td>{{ detalle.id_movimiento.fecha_mov }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Motivo:</th>
+                                                <td>{{ detalle.motivo }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Agente:</th>
+                                                <td>{{ detalle.id_agente }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Área:</th>
+                                                <td>{{ detalle.id_area }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Observaciones:</th>
+                                                <td>{{ detalle.observaciones }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Terminal:</th>
+                                                <td>{{ detalle.id_movimiento.id_terminal }}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
                             </li>
+                            {% endif %}
+                            {% endfor %}
                         </ul>
                     </div>
                     <div class="modal-footer">
@@ -119,35 +153,35 @@
                 var filterOptions = {
                     'Tipo': ['Activo', 'Periférico'],
                     'Estado': ['Activo', 'Inactivo'],
-                    'Categoria': ['PC','Laptop','Monitor','Diadema','Teclado','Mouse','Base Refrigerante']
+                    'Categoria': ['PC', 'Laptop', 'Monitor', 'Diadema', 'Teclado', 'Mouse', 'Base Refrigerante']
                 };
-            
+
                 $('#tabla thead th').each(function (index) {
                     var columnTitle = $(this).text().trim();
                     var header = $(this);
-            
+
                     var filterContainer = $('<div class="filter-container"></div>');
-            
+
                     if (filterOptions[columnTitle]) {
                         var select = $('<select class="column-select"><option value="">Todos</option></select>')
                             .on('change', function () {
                                 var val = $.fn.dataTable.util.escapeRegex($(this).val());
                                 table.column(index).search(val ? '^' + val + '$' : '', true, false).draw();
                             });
-            
+
                         filterOptions[columnTitle].forEach(function (option) {
                             select.append('<option value="' + option + '">' + option + '</option>');
                         });
-            
+
                         filterContainer.append(select);
                     } else if (columnTitle !== 'Linea de tiempo' && columnTitle !== 'id') {
                         var input = $('<input type="text" placeholder="Buscar ' + columnTitle + '" class="column-search" />');
                         filterContainer.append(input);
                     }
-            
+
                     header.append(filterContainer);
                 });
-            
+
                 $('.column-search').on('keyup change', function () {
                     var colIndex = $(this).parent().parent().index();
                     table.column(colIndex).search(this.value).draw();

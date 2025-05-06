@@ -3,45 +3,101 @@
 {% block columnas %}
 <tr>
     <th scope="col">id</th>
-    <th scope="col">Fecha</a></th>
+    <th scope="col">Fecha</th>
     <th scope="col">Tipo de movimiento</th>
     <th scope="col">Terminal</th>
+    <th scope="col">Detalle de movimiento</th>
 </tr>
 {% endblock %}
 
 {% block filas %}
-{% for m in object_list %}
+{% for item in movimientos_con_detalles %}
 <tr>
-    <td>{{ m.id }}</td>
-    <td>{{ m.fecha_mov }}</td>
-    <td>{{ m.tipo_mov }}</td>
-    <td>{{ m.id_terminal }}</td>
+    <td>{{ item.movimiento.id }}</td>
+    <td>{{ item.movimiento.fecha_mov }}</td>
+    <td>{{ item.movimiento.tipo_mov }}</td>
+    <td>{{ item.movimiento.id_terminal }}</td>
+    <td>
+        <button id="DetalleMovimiento-{{ item.movimiento.id }}" type="button" data-toggle="modal" data-target="#modal-{{ item.movimiento.id }}">
+            <i class="fas fa-search"></i>
+        </button>
+        <div class="modal fade" id="modal-{{ item.movimiento.id }}" tabindex="-1" role="dialog" aria-labelledby="movimientoModalLabel-{{ item.movimiento.id }}" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered custom-width-modal" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Tipo de movimiento: <b>{{ item.movimiento.tipo_mov }}</b></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="captura">
+                        <p><b>ID Movimiento:</b><br> {{ item.movimiento.id }}</p>
+                        <p><b>Tipo de movimiento:</b><br> {{ item.movimiento.tipo_mov }}</p>
+                        <p><b>Responsable:</b><br> {{ item.movimiento.responsable }}</p>
+                        <p><b>Fecha de movimiento:</b><br> {{ item.movimiento.fecha_mov }}</p>
+                        <p><b>Terminal:</b><br> {{ item.movimiento.id_terminal }}</p>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Activo</th>
+                                    <th>Motivo</th>
+                                    <th>Agente</th>
+                                    <th>Nomenclatura</th>
+                                    <th>Área</th>
+                                    <th>Observaciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for detalle in item.detalle_movimiento %}
+                                <tr>
+                                    <td>{{ detalle.id_activo }}</td>
+                                    <td>{{ detalle.motivo }}</td>
+                                    <td>{{ detalle.id_agente }}</td>
+                                    <td>{{ detalle.nomenclatura }}</td>
+                                    <td>{{ detalle.id_area }}</td>
+                                    <td>{{ detalle.observaciones }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">No hay detalles para este movimiento.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </td>
 </tr>
 {% endfor %}
 {% endblock %}
 {% block javascript %}
 <script type="application/javascript">
     $(document).ready(function () {
-        var columnNames = ['id', 'Fecha', 'Tipo de movimiento', 'Terminal'];
-        var excludedColumnIndex = columnNames.indexOf('Opciones');  // Opciones no existe aquí, pero lo dejamos por si quieres agregar luego
-        
+        var columnNames = ['id', 'Fecha', 'Tipo de movimiento', 'Terminal', 'Detalle de movimiento'];
+        var excludedColumnIndices = [
+            columnNames.indexOf('id'),
+            columnNames.indexOf('Detalle de movimiento')
+        ];
+
         var table = $("#tabla").DataTable({
             responsive: true,
             initComplete: function () {
                 var api = this.api();
+
                 api.columns().every(function (index) {
                     var column = this;
                     var header = $(column.header());
-                    
-                    if (index !== excludedColumnIndex) {
+
+                    if (!excludedColumnIndices.includes(index)) {
                         var filterContainer = $('<div class="filter-container"></div>').appendTo(header.empty());
                         $('<label>' + columnNames[index] + '</label>').appendTo(filterContainer);
 
                         if (index === 1) {
-                            // FILTRO POR FECHA
                             $('<label>Fecha inicial:</label>').appendTo(filterContainer);
                             var startDateInput = $('<input type="date" placeholder="Desde">').appendTo(filterContainer);
-                            
+
                             $('<label>Fecha final:</label>').appendTo(filterContainer);
                             var endDateInput = $('<input type="date" placeholder="Hasta">').appendTo(filterContainer);
 
@@ -52,15 +108,15 @@
                                 var start = startDate ? new Date(startDate + "T00:00:00") : null;
                                 var end = endDate ? new Date(endDate + "T23:59:59") : null;
 
-                                // Limpiar cualquier búsqueda previa
                                 $.fn.dataTable.ext.search = [];
 
-                                // Filtro personalizado
                                 $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-                                    var fechaTexto = data[1]; // Columna Fecha
-                                    var fechaData = new Date(fechaTexto);
+                                    var fechaTexto = data[1];
+                                    
+                                    var fechaCompleta = new Date(fechaTexto);
+                                    if (isNaN(fechaCompleta.getTime())) return true;
 
-                                    if ((start && fechaData < start) || (end && fechaData > end)) {
+                                    if ((start && fechaCompleta < start) || (end && fechaCompleta > end)) {
                                         return false;
                                     }
                                     return true;
@@ -68,9 +124,7 @@
 
                                 table.draw();
                             });
-
                         } else {
-                            // FILTRO NORMAL (select dropdown)
                             var select = $('<select><option value="">Todos</option></select>')
                                 .appendTo(filterContainer)
                                 .on('change', function () {
@@ -79,8 +133,9 @@
                                         .search(val ? '^' + val + '$' : '', true, false)
                                         .draw();
                                 });
-                            column.data().unique().sort().each(function (d, j) {
-                                select.append('<option value="' + d + '">' + d + '</option>');
+
+                            column.data().unique().sort().each(function (d) {
+                                select.append('<option value="' + d.trim() + '">' + d + '</option>');
                             });
                         }
                     } else {

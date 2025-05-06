@@ -50,7 +50,7 @@ CREATE TABLE `activo` (
 
 LOCK TABLES `activo` WRITE;
 /*!40000 ALTER TABLE `activo` DISABLE KEYS */;
-INSERT INTO `activo` VALUES (1,'2025-04-27 23:08:27.415626',1,'PC',12345,0,'ThinkCentre','MJ0GNLSD245',1,1,2,0),(2,'2025-04-27 23:09:47.080791',1,'Laptop',12345678,1,'DELL PRO MAX16','DA4643RHS',1,1,3,0),(3,'2025-04-27 23:11:03.197773',1,'Laptop',12346,0,'HP PAVLION 15','GMDS6384KFD',1,1,1,0),(4,'2025-04-27 23:11:53.617602',0,'Diadema',NULL,0,'H190','FMSM263425 ASLWFKL',1,1,4,0),(5,'2025-04-27 23:15:10.707773',1,'Monitor',12347,0,'VisionPRO32','FVSME532334',1,1,2,0);
+INSERT INTO `activo` VALUES (1,'2025-04-27 23:08:27.415626',1,'PC',12345,0,'ThinkCentre','MJ0GNLSD245',0,1,2,0),(2,'2025-04-27 23:09:47.080791',1,'Laptop',12345678,1,'DELL PRO MAX16','DA4643RHS',1,1,3,0),(3,'2025-04-27 23:11:03.197773',1,'Laptop',12346,0,'HP PAVLION 15','GMDS6384KFD',1,1,1,0),(4,'2025-04-27 23:11:53.617602',0,'Diadema',NULL,0,'H190','FMSM263425 ASLWFKL',1,1,4,0),(5,'2025-04-27 23:15:10.707773',1,'Monitor',12347,0,'VisionPRO32','FVSME532334',1,1,2,0);
 /*!40000 ALTER TABLE `activo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -267,7 +267,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$1000000$egTazNqXMCglM4uyfRaZ4C$vnayyaHIC3OuY+wCqw+ARr3stnYxET0ejC1n24uR6xE=','2025-04-27 22:58:54.450131',1,'admin','','','dzvio2004@gmail.com',1,1,'2025-04-27 22:58:06.257891');
+INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$1000000$egTazNqXMCglM4uyfRaZ4C$vnayyaHIC3OuY+wCqw+ARr3stnYxET0ejC1n24uR6xE=','2025-04-29 14:34:31.610654',1,'admin','','','dzvio2004@gmail.com',1,1,'2025-04-27 22:58:06.257891');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -352,7 +352,7 @@ CREATE TABLE `detalle_movimiento` (
   CONSTRAINT `Detalle_movimiento_id_agente_id_bd4a6759_fk_Agente_id` FOREIGN KEY (`id_agente_id`) REFERENCES `agente` (`id`),
   CONSTRAINT `Detalle_movimiento_id_area_id_b2e679b8_fk_Area_id` FOREIGN KEY (`id_area_id`) REFERENCES `area` (`id`),
   CONSTRAINT `Detalle_movimiento_id_movimiento_id_1f253240_fk_Movimiento_id` FOREIGN KEY (`id_movimiento_id`) REFERENCES `movimiento` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -361,6 +361,7 @@ CREATE TABLE `detalle_movimiento` (
 
 LOCK TABLES `detalle_movimiento` WRITE;
 /*!40000 ALTER TABLE `detalle_movimiento` DISABLE KEYS */;
+INSERT INTO `detalle_movimiento` VALUES (1,'Asignación de equipo','T1-CAL-12345','Se entrega en perfectas condiciones',1,2,2,1);
 /*!40000 ALTER TABLE `detalle_movimiento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -472,7 +473,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('iawmda9aluuypaaqnjg39owvgzpi5863','.eJxVjEEOwiAQRe_C2hBgVAaX7nuGZmAGqRpISrsy3l2bdKHb_977LzXSupRx7TKPE6uLsurwu0VKD6kb4DvVW9Op1WWeot4UvdOuh8byvO7u30GhXr41svdgPVI2IVl0krIkR5yPHgJghEDiBBx7AmNPJIImEJkzYrQBRb0_64k4Dw:1u9Fdu:xhmtDXg5A1OmXRIj3ELLEMIv9rh3UZc040MM3yW4Z8o','2025-05-11 22:58:54.457346');
+INSERT INTO `django_session` VALUES ('iawmda9aluuypaaqnjg39owvgzpi5863','.eJxVjEEOwiAQRe_C2hBgVAaX7nuGZmAGqRpISrsy3l2bdKHb_977LzXSupRx7TKPE6uLsurwu0VKD6kb4DvVW9Op1WWeot4UvdOuh8byvO7u30GhXr41svdgPVI2IVl0krIkR5yPHgJghEDiBBx7AmNPJIImEJkzYrQBRb0_64k4Dw:1u9Fdu:xhmtDXg5A1OmXRIj3ELLEMIv9rh3UZc040MM3yW4Z8o','2025-05-11 22:58:54.457346'),('yuwpv7lssz66ns52pqneilrhpa3nisx1','.eJxVjEEOwiAQRe_C2hBgVAaX7nuGZmAGqRpISrsy3l2bdKHb_977LzXSupRx7TKPE6uLsurwu0VKD6kb4DvVW9Op1WWeot4UvdOuh8byvO7u30GhXr41svdgPVI2IVl0krIkR5yPHgJghEDiBBx7AmNPJIImEJkzYrQBRb0_64k4Dw:1u9qit:OcOGnWT3witPWTDSWsSWTiokxaE7wD-WAXOjutrgBC4','2025-05-13 14:34:31.618298');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -522,7 +523,7 @@ CREATE TABLE `movimiento` (
   CONSTRAINT `Movimiento_id_terminal_id_2e28f0a8_fk_Terminal_id` FOREIGN KEY (`id_terminal_id`) REFERENCES `terminal` (`id`),
   CONSTRAINT `Movimiento_responsable_content__a3156c98_fk_django_co` FOREIGN KEY (`responsable_content_type_id`) REFERENCES `django_content_type` (`id`),
   CONSTRAINT `movimiento_chk_1` CHECK ((`responsable_object_id` >= 0))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -531,6 +532,7 @@ CREATE TABLE `movimiento` (
 
 LOCK TABLES `movimiento` WRITE;
 /*!40000 ALTER TABLE `movimiento` DISABLE KEYS */;
+INSERT INTO `movimiento` VALUES (1,'2025-04-29 14:35:53.638061','Asignación',2,4,1);
 /*!40000 ALTER TABLE `movimiento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -604,4 +606,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-27 23:15:36
+-- Dump completed on 2025-04-29 14:36:44

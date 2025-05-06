@@ -16,8 +16,8 @@ $(function () {
       labels  : ['JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
       datasets: [
         {
-          backgroundColor: '#04644b',
-          borderColor    : '#04644b',
+          backgroundColor: '#4D90FE',
+          borderColor    : '#4D90FE',
           data           : [1000, 2000, 3000, 2500, 2700, 2500, 3000]
         },
         {
@@ -81,12 +81,12 @@ $(function () {
         type                : 'line',
         data                : [100, 120, 170, 167, 180, 177, 160],
         backgroundColor     : 'transparent',
-        borderColor         : '#04644b',
-        pointBorderColor    : '#04644b',
-        pointBackgroundColor: '#04644b',
+        borderColor         : '#4D90FE',
+        pointBorderColor    : '#4D90FE',
+        pointBackgroundColor: '#4D90FE',
         fill                : false
-        // pointHoverBackgroundColor: '#04644b',
-        // pointHoverBorderColor    : '#04644b'
+        // pointHoverBackgroundColor: '#4D90FE',
+        // pointHoverBorderColor    : '#4D90FE'
       },
         {
           type                : 'line',

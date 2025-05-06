@@ -67,7 +67,7 @@
         text: errors,
         icon: 'error',
         confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#04644b'
+        confirmButtonColor: '#4D90FE'
     });
     {% elif request.GET.created %}
     Swal.fire({
@@ -75,7 +75,7 @@
         text: 'agente registrado con éxito.',
         icon: 'success',
         confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#04644b'
+        confirmButtonColor: '#4D90FE'
     }).then((result) => {
         if (result.isConfirmed) {
             window.location.href = "{% url 'app:agente_lista' %}";
@@ -87,7 +87,7 @@
         text: 'Agente editado con éxito.',
         icon: 'success',
         confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#04644b'
+        confirmButtonColor: '#4D90FE'
     }).then((result) => {
         if (result.isConfirmed) {
             window.location.href = "{% url 'app:agente_lista' %}";

@@ -4,12 +4,12 @@
 
 .nav-item:hover {
     background-color: white;
-    color: #04644b;
+    color: #4D90FE;
 }
 
 .nav-item:hover .nav-link,
 .nav-item:hover .nav-icon {
-    color: #04644b !important;
+    color: #4D90FE !important;
 }
 
 .nav-itemm {
@@ -18,17 +18,17 @@
 
 .nav-itemm:hover {
     background-color: rgb(235, 235, 235);
-    color: #04644b;
+    color: #4D90FE;
 }
 
 .nav-itemm:hover .nav-link,
 .nav-itemm:hover .nav-icon {
-    color: #04644b !important;
+    color: #4D90FE !important;
 }
 
 .main-footer {
-    background-color: #04644b;
-    border-color: #04644b;
+    background-color: #4D90FE;
+    border-color: #4D90FE;
     color: #ffffff;
 }
 
@@ -39,14 +39,14 @@
 }
 
 .main-sidebar {
-    background: linear-gradient(#04644b, #04644b, #6ddbd7);
+    background: linear-gradient(#4D90FE, #4D90FE, #6ddbd7);
     align-content: center;
 }
 
 .containerBackup {
     text-align: center;
     color: #ffffff;
-    background: linear-gradient(#04644b, #04644b, #6ddbd7);
+    background: linear-gradient(#4D90FE, #4D90FE, #6ddbd7);
     border-radius: 15px;
 }
 
@@ -59,7 +59,7 @@
 }
 
 .containerBackup .generate-section {
-    background: #04644b;
+    background: #4D90FE;
     border-radius: 10px;
     padding: 20px;
     width: 250px;
@@ -68,7 +68,7 @@
 }
 
 .containerBackup .backup-section .restore-section {
-    background: #04644b;
+    background: #4D90FE;
     border-radius: 10px;
     padding: 20px;
     width: 1000px;
@@ -84,13 +84,13 @@
     display: block;
     text-align: center;
     color: #ffffff;
-    background: linear-gradient(#04644b, #04644b, #6ddbd7);
+    background: linear-gradient(#4D90FE, #4D90FE, #6ddbd7);
     border-radius: 15px;
     padding: 20px;
 }
 
 .containerReport .format-section {
-    background: #04644b;
+    background: #4D90FE;
     border-radius: 10px;
     padding: 20px;
     width: 250px;
@@ -114,7 +114,7 @@ h1 {
 }
 
 .dropdown-item:hover {
-    background-color: #043b2e;
+    background-color: #123AB3;
     border-radius: 10px;
 }
 
@@ -123,14 +123,14 @@ h1 {
 }
 
 .breadcrumb-item {
-    background-color: #04644B;
-    border-color: #04644B;
+    background-color: #4D90FE;
+    border-color: #4D90FE;
     border-radius: 10px;
     padding: 5px;
 }
 
 .dark-mode .content-wrapper {
-    background-image: url("/static/img/backDark.jpg");
+    background-image: url("/static/img/backDark.png");
     background-size: cover;
     background-repeat: no-repeat;
 }
@@ -363,18 +363,18 @@ h1 {
 
 .select2-container--default .select2-results__option--highlighted[aria-selected],
 .select2-container--default .select2-results__option--highlighted[aria-selected]:hover {
-    background-color: #04644B;
+    background-color: #4D90FE;
     color: black;
 }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected],
 .select2-container--default .select2-results__option--highlighted[aria-selected]:hover {
-    background-color: #04644B;
+    background-color: #4D90FE;
     color: #fff;
 }
 
 .logout-menu {
-    background-color: #04644b;
+    background-color: #4D90FE;
     border-color: #ffffff;
     border-radius: 10px
 }
@@ -613,7 +613,7 @@ tr:hover td {
 }
 
 .product-sale-table th {
-    background-color: #04644B;
+    background-color: #4D90FE;
     color: white;
     font-weight: bold;
 }
@@ -681,7 +681,7 @@ tr:hover td {
 }
 
 .product-table th {
-    background-color: #04644B;
+    background-color: #4D90FE;
     color: white;
     font-weight: bold;
 }
@@ -748,7 +748,7 @@ tr:hover td {
 }
 
 .dish-table th {
-    background-color: #04644B;
+    background-color: #4D90FE;
     color: white;
     font-weight: bold;
 }
@@ -853,7 +853,7 @@ button {
     margin: 10px;
     border: none;
     border-radius: 5px;
-    background-color: #04644B;
+    background-color: #4D90FE;
     color: white;
     font-size: 16px;
     cursor: pointer;
